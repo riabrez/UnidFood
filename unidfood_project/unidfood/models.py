@@ -17,7 +17,7 @@ class Place(models.Model):
         return self.name
     
 class Deal(models.Model):
-    place = models.ForeignKey(Place)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
     percent_discount = models.IntegerField()
     valid_intil = models.DateTimeField()
     details = models.CharField(max_length=300)
@@ -26,8 +26,8 @@ class Deal(models.Model):
         return f"{self.place} {self.percent_discount}% discount until {self.valid_intil}"
 
 class Review(models.Model):
-    user = models.ForeignKey(User)
-    place = models.ForeignKey(Place)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
     rating = models.SmallIntegerField()
     content = models.CharField(max_length=300)
     time = models.DateTimeField()
@@ -37,8 +37,8 @@ class Review(models.Model):
         return f"{self.place} review by {self.user}"
 
 class Meetup(models.Model):
-    user = models.ForeignKey(User)
-    place = models.ForeignKey(Place)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
     time = models.DateTimeField()
     details = models.CharField(max_length=300)
 
@@ -46,8 +46,8 @@ class Meetup(models.Model):
         return f"{self.place} at {self.time}"
 
 class Invitation(models.Model):
-    recipient = models.ForeignKey(User)
-    meetup = models.ForeignKey(Meetup)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
+    meetup = models.ForeignKey(Meetup, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.meetup} invitation to {self.recipient}"
