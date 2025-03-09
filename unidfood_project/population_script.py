@@ -1,118 +1,233 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
+from datetime import datetime, timezone, timedelta
 
-import unidfood
-unidfood.setup()
-from unidfood.models import UserProfile, Place, Deal, Review, Meetup, Invitation
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'unidfood_project.settings')
+
+import django
+django.setup()
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
+from unidfood.models import UserProfile, PlaceCategory, Place, Review, Deal, Meetup, Invitation
 
 def populate():
-    pass
-
-def add_user_profile(username, image):
-    u = UserProfile.objects.get_or_create(username=username)
-    u.image = image
-    u.save()
-    return u
+    users = {
+        "user1": add_user(
+            username = "user1",
+            email    = "user1@gmail.com",
+            password = "password123"
+        ),
+        "user2": add_user(
+            username = "user2",
+            email    = "user2@outlook.com",
+            password = "123456"
+        ),
+        "user3": add_user(
+            username = "user3",
+            email    = "user3@hotmail.com",
+            password = "f3q2odhi9x"
+        ),
+    }
     
-def add_place(name, address, description):
-    p = Place.objects.get_or_create(name=name, address=address)[0]
-    p.description = description
-    p.save()
-    return p
+    categories = {
+        "Restaurant": add_category("Restaurant"),
+        "Cafe": add_category("Cafe"),
+        "Pub": add_category("Pub"),
+    }
+    
+    places = [
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 1",
+            address     = "Address 1",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 2",
+            address     = "Address 2",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Cafe"],
+            name        = "Cafe 1",
+            address     = "Address 3",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Cafe"],
+            name        = "Cafe 2",
+            address     = "Address 4",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Pub"],
+            name        = "Pub 1",
+            address     = "Address 5",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Pub"],
+            name        = "Pub 2",
+            address     = "Address 6",
+            description = ""
+        ),
+    ]
+    
+    now = datetime.now(tz=timezone.utc)
+    
+    reviews = [
+        add_review(
+            user    = users["user1"],
+            place   = places[1],
+            rating  = 5,
+            time    = now,
+            content = ""
+        ),
+        add_review(
+            user    = users["user2"],
+            place   = places[3],
+            rating  = 3,
+            time    = now - timedelta(days=3, hours=6),
+            content = ""
+        ),
+        add_review(
+            user    = users["user3"],
+            place   = places[5],
+            rating  = 1,
+            time    = now - timedelta(days=400, hours=20, minutes=25),
+            content = ""
+        ),
+    ]
+    
+    deals = [
+        add_deal(
+            place       = places[0],
+            discount    = 25,
+            valid_until = now + timedelta(days=3),
+            details     = f"25% off ... at ... until ..."
+        ),
+        add_deal(
+            place       = places[1],
+            discount    = 10,
+            valid_until = now + timedelta(hours=2),
+            details     = f"10% off ... at ... until ..."
+        ),
+        add_deal(
+            place       = places[2],
+            discount    = 20,
+            valid_until = now - timedelta(days=2, hours=5),
+            details     = f"20% off ... at ... until ..."
+        ),
+    ]
+    
+    meetups = [
+        add_meetup(
+            user    = users["user1"],
+            place   = places[2],
+            time    = now + timedelta(days=7),
+            details = ""
+        ),
+        add_meetup(
+            user    = users["user2"],
+            place   = places[1],
+            time    = now + timedelta(days=2, hours=-3),
+            details = ""
+        ),
+        add_meetup(
+            user    = users["user3"],
+            place   = places[4],
+            time    = now + timedelta(minutes=47),
+            details = ""
+        ),
+    ]
+    
+    invitations = [
+        add_invitation(
+            user   = users["user2"],
+            meetup = meetups[0]),
+        add_invitation(
+            user   = users["user3"],
+            meetup = meetups[2]),
+    ]
+
+
+def add_user(username, email, password):
+    try:
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password)
+        print("Created user", username)
+    return user
+
+def add_user_profile(user, image):        
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    if created:
+        profile.image = image
+        profile.save()
+        print("Created user profile for", user.name)
+    return profile
+
+def add_category(name):
+    category, created = PlaceCategory.objects.get_or_create(name=name)
+    if created:
+        print("Created category", name)
+    return category
+    
+def add_place(category, name, address, description):
+    place, created = Place.objects.get_or_create(
+        name=name,
+        category=category,
+        address=address)
+    if created:
+        place.description = description
+        place.save()
+        print("Created place", name)
+    return place
+    
+def add_review(user, place, rating, time, content):
+    review, created = Review.objects.get_or_create(
+        user=user,
+        place=place,
+        defaults={
+            "rating":rating,
+            "time":time,
+            "content":content
+        }
+    )
+    if created:
+        print(f"Created", review)
+    return review
 
 def add_deal(place, discount, valid_until, details):
-    d = Deal.objects.create()
-    d.place = place
-    d.percent_discount = discount
-    d.valid_intil = valid_until
-    d.details = details
-    d.save()
-    return d
-    
-def add_review(user, place, rating, content, time, image):
-    r = Review.objects.get_or_create(user=user, place=place)[0]
-    r.rating = rating
-    r.content = content
-    r.time = time
-    r.image = image
-    r.save()
-    return r
+    deal = Deal.objects.create(
+        place=place,
+        percent_discount=discount,    
+        valid_until=valid_until,
+        details=details
+    )
+    print("Created deal", deal)
+    return deal
     
 def add_meetup(user, place, time, details):
-    m = Meetup.objects.create()
-    m.user = user
-    m.place = place
-    m.time = time
-    m.details = details
-    m.save()
-    return m
+    meetup = Meetup.objects.create(
+        user=user,
+        place=place,
+        time=time,
+        details=details)
+    print("Created meetup", meetup)
+    return meetup
     
-def add_invitation(recipient, meetup):
-    i = Invitation.objects.create()
-    i.recipient = recipient
-    i.meetup = meetup
-    i.save()
-    return i
+def add_invitation(user, meetup):
+    invitation = Invitation.objects.create(
+        recipient=user,
+        meetup=meetup
+    )
+    return invitation
 
-# def populate():
-#     python_pages = [
-#         {'title': 'Official Python Tutorial',
-#          'url':'http://docs.python.org/3/tutorial/',
-#          'views': 114,},
-#         {'title':'How to Think like a Computer Scientist',
-#          'url':'http://www.greenteapress.com/thinkpython/',
-#          'views': 53},
-#         {'title':'Learn Python in 10 Minutes',
-#          'url':'http://www.korokithakis.net/tutorials/python/',
-#          'views': 20} ]
-    
-#     django_pages = [
-#         {'title':'Official Django Tutorial',
-#          'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/',
-#          'views': 32},
-#         {'title':'Django Rocks',
-#          'url':'http://www.djangorocks.com/',
-#          'views': 12},
-#         {'title':'How to Tango with Django',
-#          'url':'http://www.tangowithdjango.com/',
-#          'views': 1258} ]
-    
-#     other_pages = [
-#         {'title':'Bottle',
-#          'url':'http://bottlepy.org/docs/dev/',
-#          'views': 54},
-#         {'title':'Flask',
-#          'url':'http://flask.pocoo.org',
-#          'views': 64} ]
-    
-#     cats = {'Python': {'pages': python_pages, 'views': 128, 'likes': 64},
-#             'Django': {'pages': django_pages, 'views': 64, 'likes': 32},
-#             'Other Frameworks': {'pages': other_pages, 'views': 32, 'likes': 16} }
-    
-    # for cat, cat_data in cats.items():
-    #     c = add_cat(cat, views=cat_data['views'], likes=cat_data['likes'])
-    #     for p in cat_data['pages']:
-    #         add_page(c, p['title'], p['url'], views=p['views'])
-    
-    # for c in Category.objects.all():
-    #     for p in Page.objects.filter(category=c):
-    #         print(f'- {c}: {p}')
-
-# def add_page(cat, title, url, views=0):
-#     p = Page.objects.get_or_create(category=cat, title=title)[0]
-#     p.url=url
-#     p.views=views
-#     p.save()
-#     return p
-
-# def add_cat(name, views=0, likes=0):
-#     c = Category.objects.get_or_create(name=name)[0]
-#     c.views = views
-#     c.likes = likes
-#     c.save()
-#     return c
-
-# Start execution here!
-if __name__ == '__main__':
-    print('Starting Rango population script...')
+if __name__ == "__main__":
+    print("Starting UnidFood population script")
     populate()
+    print("Done!")
