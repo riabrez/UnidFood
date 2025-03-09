@@ -12,12 +12,15 @@ class UserProfile(models.Model):
 class PlaceCategory(models.Model):
     name = models.CharField(max_length=40, unique=True)
     
+    class Meta:
+        verbose_name_plural = "Place categories"
+    
     def __str__(self):
         return self.name
 
 class Place(models.Model):
-    category = models.ForeignKey(PlaceCategory, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
+    category = models.ForeignKey(PlaceCategory, on_delete=models.PROTECT)
     address = models.CharField(max_length=300)
     description = models.CharField(max_length=300, blank=True)
 
