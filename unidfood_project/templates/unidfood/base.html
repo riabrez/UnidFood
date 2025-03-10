@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> UnidFood - {% block title %}Home{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <li><a href="{% url 'rango:home' %}">Home</a></li>
+        <li><a href="{% url 'rango:places' %}">Places</a></li>
+        <li><a href="{% url 'rango:nearby' %}">Nearby</a></li>
+        <li><a href="{% url 'rango:meetups' %}">Meetups</a></li>
+        <li><a href="{% url 'rango:deals' %}">Deals</a></li>
+        <li><a href="{% url 'rango:login' %}">Login</a></li>
+        <li><a href="{% url 'rango:signup' %}">Sign Up</a></li>
+    </nav>
+
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
