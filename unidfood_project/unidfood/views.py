@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
-from unidfood.forms import UserForm, UserProfileForm
+from unidfood.forms import UserForm, UserProfileForm, ReviewForm
+from unidfood.models import Review, Meetup, Invitation
 from django.contrib.auth.decorators import login_required
 
 def home(request):
@@ -60,3 +61,55 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return redirect(reverse('unidfood:home'))
+
+@login_required
+def add_review(request):
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user  
+            review.save()
+            return redirect('unidfood:home')  
+        else:
+            return HttpResponse("Invalid form submission.")
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'unidfood/add_review.html', {'form': form})
+
+@login_required
+def my_reviews(request):
+    reviews = Review.objects.filter(user=request.user)
+    return render(request, 'unidfood/my_reviews.html', {'reviews': reviews})
+
+@login_required
+def my_meetups(request):
+    meetups = Meetup.objects.filter(user=request.user) 
+    invitations = Invitation.objects.filter(recipient=request.user) 
+
+    if request.method == 'POST':
+        invitation_id = request.POST.get('invitation_id')
+        action = request.POST.get('action') 
+
+        try:
+            invitation = Invitation.objects.get(id=invitation_id, recipient=request.user)
+            if action == 'accept':
+                Meetup.objects.create(
+                    user=request.user,
+                    place=invitation.meetup.place,
+                    time=invitation.meetup.time,
+                    details=invitation.meetup.details
+                )
+
+                invitation.delete()
+
+            elif action == 'decline':
+                invitation.delete()
+
+        except Invitation.DoesNotExist:
+            pass 
+
+        return redirect('unidfood:my_meetups')
+
+    return render(request, 'unidfood/my_meetups.html', {'meetups': meetups, 'invitations': invitations})

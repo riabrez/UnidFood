@@ -1,0 +1,19 @@
+{% extends 'unidfood/base.html' %}
+
+{% block content %}
+  <h2>Your Reviews</h2>
+  
+  {% if reviews %}
+    <ul>
+      {% for review in reviews %}
+        <li>
+          <strong>{{ review.place }}</strong> - Rated: {{ review.rating }}/5
+          <p>{{ review.content }}</p>
+          <p>Reviewed on: {{ review.time }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't written any reviews yet.</p>
+  {% endif %}
+{% endblock %}
