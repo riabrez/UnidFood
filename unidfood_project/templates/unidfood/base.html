@@ -2,9 +2,11 @@
 <html>
 <head>
     <title> UnidFood - {% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <nav>
+        <!--Links to pages-->
         <li><a href="{% url 'rango:home' %}">Home</a></li>
         <li><a href="{% url 'rango:places' %}">Places</a></li>
         <li><a href="{% url 'rango:nearby' %}">Nearby</a></li>
@@ -12,6 +14,14 @@
         <li><a href="{% url 'rango:deals' %}">Deals</a></li>
         <li><a href="{% url 'rango:login' %}">Login</a></li>
         <li><a href="{% url 'rango:signup' %}">Sign Up</a></li>
+
+        <!-- Search bar -->
+        <form action="{ url 'rango:search' %}" method="get">
+            <input type="text" name="q" placeholder="Search..." required>
+            <button type="submit"  style="background: none; border: none; padding: 0;">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
     </nav>
 
     <div>

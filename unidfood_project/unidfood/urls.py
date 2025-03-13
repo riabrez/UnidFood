@@ -10,4 +10,6 @@ urlpatterns = [
     path('add_review/', views.add_review, name='add_review'),
     path('my_reviews/', views.my_reviews, name='my_reviews'),
     path('my_meetups/', views.my_meetups, name='my_meetups'),
+    path('deals/', views.deals, name='deals'),
+    path('places/', views.places, name='places'),
 ]

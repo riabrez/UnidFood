@@ -4,8 +4,9 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
-from unidfood.models import Review, Meetup, Invitation
+from unidfood.models import Review, Meetup, Invitation, Deal, Place, PlaceCategory
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 
 def home(request):
     return HttpResponse("Rango says hey there partner!")
@@ -113,3 +114,18 @@ def my_meetups(request):
         return redirect('unidfood:my_meetups')
 
     return render(request, 'unidfood/my_meetups.html', {'meetups': meetups, 'invitations': invitations})
+
+def deals(request):
+    deals = Deal.objects.filter(valid_until__gte=now())
+    return render(request, 'unidfood/deals.html', {'deals': deals})
+
+def places(request):
+    restaurant_cat = PlaceCategory.objects.get(name='restaurant')
+    bar_cat = PlaceCategory.objects.get(name='bar')
+    cafe_cat = PlaceCategory.objects.get(name='cafe')
+
+    restaurants = Place.objects.filter(category=restaurant_cat)[:3]
+    bars = Place.objects.filter(category=bar_cat)[:3]
+    cafes = Place.objects.filter(category=cafe_cat)[:3]
+
+    return render(request, 'places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
