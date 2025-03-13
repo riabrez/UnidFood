@@ -5,6 +5,7 @@
 </head>
 <body>
     <nav>
+        <!--Links to pages-->
         <li><a href="{% url 'rango:home' %}">Home</a></li>
         <li><a href="{% url 'rango:places' %}">Places</a></li>
         <li><a href="{% url 'rango:nearby' %}">Nearby</a></li>
@@ -12,6 +13,12 @@
         <li><a href="{% url 'rango:deals' %}">Deals</a></li>
         <li><a href="{% url 'rango:login' %}">Login</a></li>
         <li><a href="{% url 'rango:signup' %}">Sign Up</a></li>
+
+        <!-- Search bar -->
+        <form action="{ url 'rango:search' %}" method="get">
+            <input type="text" name="q" placeholder="Search..." required>
+            <button type="submit">Search</button>
+        </form>
     </nav>
 
     <div>
