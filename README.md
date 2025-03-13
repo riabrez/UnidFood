@@ -16,8 +16,8 @@ UniDFood is a web application designed for University of Glasgow students to:
 
 ### Prerequisites
 Ensure you have the following installed:
-- **Python 3**
-- **Django**
+- **Python 3.11**
+- **Django 2.2.28**
 - **Virtualenv** (optional but recommended)
 
 ### Steps
