@@ -1,0 +1,22 @@
+{% extends 'unidfood/base.html' %}
+
+{% block title %}Deals{% endblock %}
+
+{% block content %}
+    <h1>Exclusive Student Deals</h1>
+
+    {% if deals %}
+        <ul>
+            {% for deal in deals %}
+                <li>
+                    <strong>{{ deal.place.name }}</strong> - <em>{{ deal.title }}</em>
+                    <p>{{ deal.description }}</p>
+                    <p><strong>Discount:</strong> {{ deal.discount }}%</p>
+                    <p><strong>Valid Until:</strong> {{ deal.expiry_date }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No deals available at the moment. Check back later!</p>
+    {% endif %}
+{% endblock %}

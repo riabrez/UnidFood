@@ -1,14 +1,16 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>UnidFood - Login</title>
-    </head>
+{% extends 'unidfood/base.html' %}
 
-    <body>
+{% block title %}Login{% endblock %}
+
+{% block content %}
     <h1>Welcome to UnidFood Login Page</h1>
+    
+    <!--Space for user authentication task-->
+    {% comment %} <form method="post">
+    </form> {% endcomment %}
+
     <ul>
         <li><a href="{% url 'rango:signup' %}">Sign Up</a></li>
         <li><a href="{% url 'rango:home' %}">Home</a></li>
     </ul>
-    </body>
-</html>
+{% endblock %}
