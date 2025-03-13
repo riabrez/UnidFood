@@ -1,64 +1,65 @@
-# UnidFood
+# UniDFood
 
-UniDFood is a web application designed for University of Glasgow students to review food spots near the university, discover student deals, and organize meetups with fellow students.
+UniDFood is a web application designed for University of Glasgow students to:
+- Review food spots near the university
+- Discover student deals
+- Organize meetups with fellow students
 
-* Features
+## Features
 
-User Authentication: Signup, login, and logout functionality.
+- **User Authentication**: Signup, login, and logout functionality.
+- **Restaurant Reviews**: Users can add ratings and reviews for restaurants.
+- **Meetup Scheduling**: Users can schedule meetups at restaurants and invite others.
+- **Search & Filter**: Find restaurants based on location, rating, and affordability.
 
-Restaurant Reviews: Users can add ratings and reviews for restaurants.
+## Installation
 
-Meetup Scheduling: Users can schedule meetups at restaurants and invite others.
-
-Search & Filter: Find restaurants based on location, rating, and affordability.
-
-Installation
-
-* Prerequisites
-
+### Prerequisites
 Ensure you have the following installed:
+- **Python 3**
+- **Django**
+- **Virtualenv** (optional but recommended)
 
-Python 3
+### Steps
 
-Django
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-repo/unidfood.git
+   cd unidfood
+   ```
 
-Virtualenv (optional but recommended)
+2. Create a virtual environment and activate it:
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-* Steps
+3. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
 
-Clone the repository:
+4. Apply migrations:
+   ```sh
+   python manage.py migrate
+   ```
 
-git clone https://github.com/your-repo/unidfood.git
-cd unidfood
+5. Create a superuser:
+   ```sh
+   python manage.py createsuperuser
+   ```
 
-Create a virtual environment and activate it:
+6. Run the development server:
+   ```sh
+   python manage.py runserver
+   ```
 
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+## Usage
 
-Install dependencies:
+1. Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser.
+2. Sign up or log in.
+3. Search for restaurants, leave reviews, and schedule meetups.
 
-pip install -r requirements.txt
-
-Apply migrations:
-
-python manage.py migrate
-
-Create a superuser:
-
-python manage.py createsuperuser
-
-Run the development server:
-
-python manage.py runserver
-
-* Usage
-
-Visit http://127.0.0.1:8000/ in your browser.
-
-Sign up or log in.
-
-Search for restaurants, leave reviews, and schedule meetups.
 
 
 
