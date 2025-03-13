@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center">
+    <h1>Welcome to UniDFood</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Explore restaurants and leave reviews.</p>
+        <a href="#" class="btn btn-primary">View Restaurants</a>
+    {% else %}
+        <a href="{% url 'register' %}" class="btn btn-success">Get Started</a>
+    {% endif %}
+</div>
+{% endblock %}
