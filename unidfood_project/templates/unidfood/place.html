@@ -1,8 +1,17 @@
 {% extends 'unidfood/base.html' %}
 
-{% block title %}Deals{% endblock %}
+{% block title %}{{ place.name }}{% endblock %}
 
 {% block content %}
-    <h2>Student Deals</h2>
-    <p>Find exclusive discounts for students at restaurants, cafes, and bars.</p>
+    <h2>{{ place.name }}</h2>
+    <p><strong>Category:</strong> {{ place.category.name }}</p>
+    <p><strong>Address:</strong> {{ place.address }}</p>
+
+    {% if place.description %}
+        <p><strong>Description:</strong> {{ place.description }}</p>
+    {% else %}
+        <p><em>No description available.</em></p>
+    {% endif %}
+
+    <a href="{% url 'places' %}">Back to all places</a>
 {% endblock %}

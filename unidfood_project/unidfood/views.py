@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
 from unidfood.models import Review, Meetup, Invitation, Deal, Place, PlaceCategory
@@ -129,3 +128,7 @@ def places(request):
     cafes = Place.objects.filter(category=cafe_cat)[:3]
 
     return render(request, 'places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
+
+def place_detail(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    return render(request, 'place.html', {'place': place})
