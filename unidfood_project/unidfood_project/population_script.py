@@ -31,7 +31,7 @@ def populate():
     categories = {
         "Restaurant": add_category("Restaurant"),
         "Cafe": add_category("Cafe"),
-        "Pub": add_category("Pub"),
+        "Bar": add_category("Bar"),
     }
     
     places = [
@@ -54,20 +54,20 @@ def populate():
             description = ""
         ),
         add_place(
-            category    = categories["Cafe"],
+            category    = categories["Bar"],
             name        = "Cafe 2",
             address     = "Address 4",
             description = ""
         ),
         add_place(
-            category    = categories["Pub"],
-            name        = "Pub 1",
+            category    = categories["Bar"],
+            name        = "Bar 1",
             address     = "Address 5",
             description = ""
         ),
         add_place(
-            category    = categories["Pub"],
-            name        = "Pub 2",
+            category    = categories["Bar"],
+            name        = "Bar 2",
             address     = "Address 6",
             description = ""
         ),

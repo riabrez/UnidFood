@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'unidfood/base.html' %}
 
 {% block content %}
 <div class="container">
@@ -19,6 +19,6 @@
 
         <button type="submit">Register</button>
     </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    <p>Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
 </div>
 {% endblock %}

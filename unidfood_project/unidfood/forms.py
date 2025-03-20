@@ -12,7 +12,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website','picture',)
+        fields = ('image',)
 
 class ReviewForm(forms.ModelForm):
     place = forms.ModelChoiceField(
@@ -45,4 +45,3 @@ class ReviewForm(forms.ModelForm):
             self.add_error('rating', "Rating must be between 1 and 5.")
 
         return cleaned_data
-
