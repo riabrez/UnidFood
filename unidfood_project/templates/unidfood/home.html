@@ -1,13 +1,16 @@
+
 {% extends 'unidfood/base.html' %}
 
 {% block title %}Home{% endblock %}
-
 {% block content %}
-    <h1>Welcome to UnidFood</h1>
-    <p>Discover great places, student deals, and plan meetups with friends!</p>
+<div class="container text-center">
+    <h1>Welcome to UniDFood</h1>
     
-    <ul>
-        <li><a href="{% url 'unidfood:signup' %}">Sign Up</a></li>
-        <li><a href="{% url 'unidfood:login' %}">Login</a></li>
-    </ul>
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Explore restaurants and leave reviews.</p>
+        <a href="#" class="btn btn-primary">View Restaurants</a>
+    {% else %}
+        <a href="{% url 'register' %}" class="btn btn-success">Get Started</a>
+    {% endif %}
+</div>
 {% endblock %}
