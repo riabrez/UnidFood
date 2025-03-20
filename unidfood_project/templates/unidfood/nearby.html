@@ -5,6 +5,9 @@
 {% block content %}
     <h1>Nearby Affordable Restaurants, Bars & Cafes</h1>
 
+    <!-- Search Box for map -->
+    <input id="searchBox" type="text" placeholder="Search" style="width: 100%; padding: 10px; margin-bottom: 20px;">
+
     <!-- Map Container -->
     <div id="map" style="height: 500px; width: 100%;"></div>
 
@@ -14,8 +17,8 @@
         <!-- Places will be dynamically added here -->
     </ul>
 
-    <!--Load JS File here-->
-    <script></script>
+    <!-- Load JS main.js File -->
+    <script src="{% static 'js/main.js' %}"></script>
 
 
 {% endblock %}
