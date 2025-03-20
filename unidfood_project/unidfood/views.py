@@ -119,19 +119,19 @@ def deals(request):
     return render(request, 'unidfood/deals.html', {'deals': deals})
 
 def places(request):
-    restaurant_cat = PlaceCategory.objects.get(name='restaurant')
-    bar_cat = PlaceCategory.objects.get(name='bar')
-    cafe_cat = PlaceCategory.objects.get(name='cafe')
+    restaurant_cat = PlaceCategory.objects.get(name='Restaurant')
+    bar_cat = PlaceCategory.objects.get(name='Bar')
+    cafe_cat = PlaceCategory.objects.get(name='Cafe')
 
     restaurants = Place.objects.filter(category=restaurant_cat)[:3]
     bars = Place.objects.filter(category=bar_cat)[:3]
     cafes = Place.objects.filter(category=cafe_cat)[:3]
 
-    return render(request, 'places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
+    return render(request, 'unidfood/places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
 
 def place_detail(request, place_id):
     place = get_object_or_404(Place, id=place_id)
-    return render(request, 'place.html', {'place': place})
+    return render(request, 'unidfood/place.html', {'place': place})
 
 def nearby(request):
     return HttpResponse("TODO: nearby view")
