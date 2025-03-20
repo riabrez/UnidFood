@@ -13,4 +13,6 @@ urlpatterns = [
     path('deals/', views.deals, name='deals'),
     path('places/', views.places, name='places'),
     path('place/<int:place_id>/', views.place_detail, name='place_detail'),
+    path('nearby/', views.nearby, name='nearby'),
+    path('search/', views.search, name='search'),
 ]
