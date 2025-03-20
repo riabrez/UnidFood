@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
 def home(request):
-    return HttpResponse("Rango says hey there partner!")
+    return render(request, 'unidfood/home.html')
 
 def register(request):
 	registered = False
