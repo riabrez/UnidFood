@@ -5,4 +5,38 @@
 {% block content %}
     <h2>Browse Places</h2>
     <p>Explore popular restaurants, bars, and cafes near you.</p>
+
+    <!-- Restaurants Section -->
+    <h3>Top Restaurants</h3>
+    <ul>
+        {% for place in restaurants %}
+            <li>
+                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
+                Description: {{ place.description }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Bars Section -->
+    <h3>Top Bars</h3>
+    <ul>
+        {% for place in bars %}
+            <li>
+                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
+                Description: {{ place.description }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Cafes Section -->
+    <h3>Top Cafes</h3>
+    <ul>
+        {% for place in cafes %}
+            <li>
+                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
+                Description: {{ place.description }}
+            </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
