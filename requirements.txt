@@ -1,0 +1,4 @@
+Django==2.2.3
+Pillow==5.4.1
+pytz==2025.1
+sqlparse==0.4.4

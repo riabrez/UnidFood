@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from unidfood.models import UserProfile, Review, Place
+from unidfood.models import UserProfile
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -11,7 +12,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('image',)
+        fields = ('website','picture',)
 
 class ReviewForm(forms.ModelForm):
     place = forms.ModelChoiceField(
@@ -44,3 +45,4 @@ class ReviewForm(forms.ModelForm):
             self.add_error('rating', "Rating must be between 1 and 5.")
 
         return cleaned_data
+
