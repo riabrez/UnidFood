@@ -12,7 +12,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website','picture',)
+        fields = ('image',)
 
 class ReviewForm(forms.ModelForm):
     place = forms.ModelChoiceField(
