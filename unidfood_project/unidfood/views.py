@@ -8,9 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
 def home(request):
-    return HttpResponse("Rango says hey there partner!")
+    return render(request, 'unidfood/home.html')
 
-def signup(request):
+def register(request):
 	registered = False
 
 	if request.method == 'POST' :
@@ -36,7 +36,7 @@ def signup(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 
-	return render(request, 'unidfood/signup.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+	return render(request, 'unidfood/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 def user_login(request):
@@ -119,19 +119,19 @@ def deals(request):
     return render(request, 'unidfood/deals.html', {'deals': deals})
 
 def places(request):
-    restaurant_cat = PlaceCategory.objects.get(name='restaurant')
-    bar_cat = PlaceCategory.objects.get(name='bar')
-    cafe_cat = PlaceCategory.objects.get(name='cafe')
+    restaurant_cat = PlaceCategory.objects.get(name='Restaurant')
+    bar_cat = PlaceCategory.objects.get(name='Bar')
+    cafe_cat = PlaceCategory.objects.get(name='Cafe')
 
     restaurants = Place.objects.filter(category=restaurant_cat)[:3]
     bars = Place.objects.filter(category=bar_cat)[:3]
     cafes = Place.objects.filter(category=cafe_cat)[:3]
 
-    return render(request, 'places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
+    return render(request, 'unidfood/places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
 
 def place_detail(request, place_id):
     place = get_object_or_404(Place, id=place_id)
-    return render(request, 'place.html', {'place': place})
+    return render(request, 'unidfood/place.html', {'place': place})
 
 def nearby(request):
     return HttpResponse("TODO: nearby view")
