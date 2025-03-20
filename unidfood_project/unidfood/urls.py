@@ -4,7 +4,7 @@ from unidfood import views
 app_name = 'unidfood'
 urlpatterns = [
     path('', views.home, name='home'),
-    path('signup/', views.signup, name='signup'),
+    path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('add_review/', views.add_review, name='add_review'),

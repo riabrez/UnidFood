@@ -10,7 +10,7 @@ from django.utils.timezone import now
 def home(request):
     return HttpResponse("Rango says hey there partner!")
 
-def signup(request):
+def register(request):
 	registered = False
 
 	if request.method == 'POST' :
@@ -36,7 +36,7 @@ def signup(request):
 		user_form = UserForm()
 		profile_form = UserProfileForm()
 
-	return render(request, 'unidfood/signup.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+	return render(request, 'unidfood/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
 def user_login(request):
