@@ -7,16 +7,16 @@
 <body>
     <nav>
         <!--Links to pages-->
-        <li><a href="{% url 'rango:home' %}">Home</a></li>
-        <li><a href="{% url 'rango:places' %}">Places</a></li>
-        <li><a href="{% url 'rango:nearby' %}">Nearby</a></li>
-        <li><a href="{% url 'rango:meetups' %}">Meetups</a></li>
-        <li><a href="{% url 'rango:deals' %}">Deals</a></li>
-        <li><a href="{% url 'rango:login' %}">Login</a></li>
-        <li><a href="{% url 'rango:signup' %}">Sign Up</a></li>
+        <li><a href="{% url 'unidfood:home' %}">Home</a></li>
+        <li><a href="{% url 'unidfood:places' %}">Places</a></li>
+        <li><a href="{% url 'unidfood:nearby' %}">Nearby</a></li>
+        <li><a href="{% url 'unidfood:my_meetups' %}">Meetups</a></li>
+        <li><a href="{% url 'unidfood:deals' %}">Deals</a></li>
+        <li><a href="{% url 'unidfood:login' %}">Login</a></li>
+        <li><a href="{% url 'unidfood:signup' %}">Sign Up</a></li>
 
         <!-- Search bar -->
-        <form action="{ url 'rango:search' %}" method="get">
+        <form action="{ url 'unidfood:search' %}" method="get">
             <input type="text" name="q" placeholder="Search..." required>
             <button type="submit"  style="background: none; border: none; padding: 0;">
                 <i class="fas fa-search"></i>
