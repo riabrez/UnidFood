@@ -5,6 +5,15 @@
 {% block content %}
 <div class="container">
     <h2>Login</h2>
+    
+    {% if messages %}
+        <div class="alert alert-danger">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form method="POST">
         {% csrf_token %}
         <label for="username">Username:</label>

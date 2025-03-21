@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.models import User
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
-from unidfood.models import Review, Meetup, Invitation, Deal, Place, PlaceCategory
+from unidfood.models import UserProfile, Review, Meetup, Invitation, Deal, Place, PlaceCategory
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
@@ -11,51 +13,64 @@ def home(request):
     return render(request, 'unidfood/home.html')
 
 def register(request):
-	registered = False
+    registered = False
 
-	if request.method == 'POST' :
-		user_form = UserForm(request.POST)
-		profile_form = UserProfileForm(request.POST)
-		
-		if user_form.is_valid() and profile_form.is_valid():
-			user = user_form.save()
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST, request.FILES) 
 
-			user.set_password(user.password)
-			user.save()
+        if user_form.is_valid() and profile_form.is_valid():
+            username = user_form.cleaned_data['username']
 
-			profile = profile_form.save(commit=False)
-			profile.user = user
+            if User.objects.filter(username=username).exists():
+                user_form.add_error('username', 'A user with that username already exists.')
 
-			profile.save()
+            if not User.objects.filter(username=username).exists():
+                user = user_form.save(commit=False)
+                password1 = request.POST['password1']
+                password2 = request.POST['password2']
 
-			registered = True
-		else:
-			print(user_form.errors, profile_form.errors)
+                if password1 != password2:
+                    user_form.add_error('password2', 'Passwords do not match.')
+                else:
+                    user.set_password(password1)
+                    user.save()
 
-	else:
-		user_form = UserForm()
-		profile_form = UserProfileForm()
+                    profile = profile_form.save(commit=False)
+                    profile.user = user
+                    profile.save()
+                    
+                    user = authenticate(username=user.username, password=password1)
+                    if user is not None:
+                        login(request, user)
 
-	return render(request, 'unidfood/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+                    registered = True
+                    return redirect('unidfood:home')
+        else:
+            print(user_form.errors, profile_form.errors) 
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
 
+    return render(request, 'unidfood/register.html', context={'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 def user_login(request):
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-		user = authenticate(username=username, password=password)
-		if user:
-			if user.is_active:
-				login(request, user)
-				return redirect(reverse('unidfood:home'))
-			else:
-				return HttpResponse("Your UnidFood account is disabled.")
-		else:
-			print(f"Invalid login details: {username}, {password}")
-			return HttpResponse("Invalid login details supplied.")
-	else:
-		return render(request, 'unidfood/login.html')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('unidfood:home'))
+            else:
+                messages.error(request, "Your UniDFood account is disabled.")
+        else:
+            messages.error(request, "Invalid username or password.") 
+
+    return render(request, 'unidfood/login.html')
 	
 @login_required
 def user_logout(request):
@@ -79,8 +94,53 @@ def add_review(request):
     return render(request, 'unidfood/add_review.html', {'form': form})
 
 @login_required
+def my_account(request):
+    user_form = UserForm(instance=request.user)
+    
+    # Check if the user has a profile, if not create one
+    try:
+        profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = None
+    
+    if profile:
+        profile_form = UserProfileForm(instance=profile)
+    else:
+        profile_form = UserProfileForm()  # Create a new profile if it doesn't exist
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('unidfood:my_account')  # Redirect back to the same page
+
+    return render(request, 'unidfood/my_account.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
+
+@login_required
 def my_reviews(request):
     reviews = Review.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        review_id = request.POST.get('review_id')
+        action = request.POST.get('action')
+
+        review = get_object_or_404(Review, id=review_id, user=request.user)
+
+        if action == 'delete':
+            review.delete()
+        elif action == 'edit':
+            return redirect('unidfood:edit_review', review_id=review.id)
+
+        return redirect('unidfood:my_reviews')
+
     return render(request, 'unidfood/my_reviews.html', {'reviews': reviews})
 
 @login_required
@@ -95,13 +155,7 @@ def my_meetups(request):
         try:
             invitation = Invitation.objects.get(id=invitation_id, recipient=request.user)
             if action == 'accept':
-                Meetup.objects.create(
-                    user=request.user,
-                    place=invitation.meetup.place,
-                    time=invitation.meetup.time,
-                    details=invitation.meetup.details
-                )
-
+                invitation.meetup.attendees.add(request.user)
                 invitation.delete()
 
             elif action == 'decline':
@@ -113,6 +167,16 @@ def my_meetups(request):
         return redirect('unidfood:my_meetups')
 
     return render(request, 'unidfood/my_meetups.html', {'meetups': meetups, 'invitations': invitations})
+
+@login_required
+def cancel_meetup(request, meetup_id):
+    meetup = get_object_or_404(Meetup, id=meetup_id, attendees=request.user)
+    meetup.attendees.remove(request.user)
+
+    if meetup.attendees.count() == 0:
+        meetup.delete()
+
+    return redirect('unidfood:my_meetups')
 
 def deals(request):
     deals = Deal.objects.filter(valid_until__gte=now())
@@ -134,7 +198,14 @@ def place_detail(request, place_id):
     return render(request, 'unidfood/place.html', {'place': place})
 
 def nearby(request):
-    return HttpResponse("TODO: nearby view")
+    places = Place.objects.all()
+    return render(request, 'nearby.html', {'places': places})
 
 def search(request):
-    return HttpResponse("TODO: search view")
+    query = request.GET.get('q', '')
+    results = []
+
+    if query:
+        results = Place.objects.filter(name__icontains=query)
+
+    return render(request, 'unidfood/search_results.html', {'query': query, 'results': results})
