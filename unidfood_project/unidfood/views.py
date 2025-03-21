@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
@@ -97,7 +97,6 @@ def add_review(request):
 def my_account(request):
     user_form = UserForm(instance=request.user)
     
-    # Check if the user has a profile, if not create one
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
@@ -106,7 +105,7 @@ def my_account(request):
     if profile:
         profile_form = UserProfileForm(instance=profile)
     else:
-        profile_form = UserProfileForm()  # Create a new profile if it doesn't exist
+        profile_form = UserProfileForm() 
     
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
@@ -117,12 +116,21 @@ def my_account(request):
             profile = profile_form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return redirect('unidfood:my_account')  # Redirect back to the same page
+            return redirect('unidfood:my_account')
 
-    return render(request, 'unidfood/my_account.html', {
-        'user_form': user_form,
-        'profile_form': profile_form,
-    })
+        if 'change_password' in request.POST:
+            new_password = request.POST.get('password1')
+            confirm_password = request.POST.get('password2')
+
+            if new_password != confirm_password:
+                password_errors = "Passwords do not match."
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+                return redirect('unidfood:my_account')
+
+    return render(request, 'unidfood/my_account.html', {'user_form': user_form, 'profile_form': profile_form, 'password_errors': password_errors if 'password_errors' in locals() else None})
 
 @login_required
 def my_reviews(request):

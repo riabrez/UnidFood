@@ -6,9 +6,8 @@
     <div class="container">
         <h1>My Account</h1>
 
-        <!-- Account Update Form -->
         <h3>Update Your Account</h3>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ user_form.as_p }} 
             {{ profile_form.as_p }}  
@@ -20,6 +19,23 @@
         {% endif %}
 
         <hr>
+        <h2>Change Password</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="password1">Password:</label>
+            <input type="password" id="password1" name="password1" required>
+
+            <label for="password2">Confirm Password:</label>
+            <input type="password" id="password2" name="password2" required>
+
+            <button type="submit" name="change_password">Change Password</button>
+        </form>
+
+        {% if password_errors %}
+            <p style="color: red;">{{ password_errors }}</p>
+        {% endif %}
+
+        <hr>
         <h2>Account Actions</h2>
         <ul>
             <li><a href="{% url 'unidfood:my_reviews' %}">View My Reviews</a></li>
@@ -27,7 +43,6 @@
             <li><a href="{% url 'unidfood:logout' %}">Logout</a></li>
         </ul>
 
-        <!-- Delete Account -->
         <form method="post">
             {% csrf_token %}
             <button type="submit" name="delete_account" style="color: red;">Delete Account</button>
