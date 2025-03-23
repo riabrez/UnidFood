@@ -2,19 +2,34 @@
 
 {% block title %}Login{% endblock %}
 
+{% block extra_styles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2>Login</h2>
-    <form method="POST">
+<div class="login-container container">
+    <h2 class="login-title">Login</h2>
+    <p class="login-description">Login to access your account and discover exclusive deals,<br> write reviews and plan meetups.</p>
+    
+    <form method="POST" class="login-form">
         {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        
-        <button type="submit">Login</button>
+
+        <div class="login-form-group">
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-input" required>
+            </div>
+
+            <div class="form-group ">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-input" required>
+            </div>
+        </div>
+
+        <button class="btn btn-dark" type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="{% url 'unidfood:register' %}">Register here</a></p>
+
+    <p class="register-link">Don't have an account? <a href="{% url 'unidfood:register' %}">Register here</a></p>
 </div>
 {% endblock %}

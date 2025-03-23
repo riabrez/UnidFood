@@ -1,24 +1,43 @@
 {% extends 'unidfood/base.html' %}
 
+{% block title %}Register{% endblock %}
+
+{% block extra_styles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2>Register</h2>
-    <form method="POST">
+<div class="register-container container">
+    <h2 class="register-title">Create Your Account</h2>
+    <p class="register-description">Sign up to join the community and start exploring exclusive content and deals!</p>
+    
+    <form method="POST" class="register-form">
         {% csrf_token %}
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
+        <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" id="username" class="form-input" required>
+        </div>
 
-        <label for="password1">Password:</label>
-        <input type="password" name="password1" id="password1" required>
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-input" required>
+        </div>
 
-        <label for="password2">Confirm Password:</label>
-        <input type="password" name="password2" id="password2" required>
+        <div class="form-group">
+            <label for="password1" class="form-label">Create Password</label>
+            <input type="password" name="password1" id="password1" class="form-input" required>
+        </div>
 
-        <button type="submit">Register</button>
+        <div class="form-group">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input type="password" name="password2" id="password2" class="form-input" required>
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-register">Register Now</button>
     </form>
-    <p>Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
+
+    <p class="login-link">Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
 </div>
 {% endblock %}
