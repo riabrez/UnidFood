@@ -23,6 +23,10 @@ main {
     flex: 1; 
 }
 
+header {
+    position: sticky;
+}
+
 footer {
     position: fixed;
     left: 0;
