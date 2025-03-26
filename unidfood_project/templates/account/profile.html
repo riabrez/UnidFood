@@ -13,6 +13,18 @@
     <p><strong>Username:</strong> {{ user.username }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
 
+    {% if user.userprofile.bio %}
+        <p><strong>Bio:</strong> {{ user.userprofile.bio }}</p>
+    {% endif %}
+    
+    {% if user.userprofile.location %}
+        <p><strong>Location:</strong> {{ user.userprofile.location }}</p>
+    {% endif %}
+
+    {% if user.userprofile.course %}
+        <p><strong>Course:</strong> {{ user.userprofile.course }}</p>
+    {% endif %}
+
     <a href="{% url 'unidfood:edit_profile' %}" class="btn btn-primary mt-2">Edit Profile</a>
     <a href="{% url 'unidfood:delete_account' %}" class="btn btn-danger mt-2">Delete Account</a>
 </div>

@@ -7,17 +7,25 @@
     <h2 class="mb-4">Register</h2>
 
     {% if registered %}
-        <div class="alert alert-success">Registration successful! <a href="{% url 'unidfood:login' %}">Login here</a>.</div>
+        <div class="alert alert-success">
+            Registration successful! <a href="{% url 'unidfood:login' %}">Login here</a>.
+        </div>
     {% else %}
         <form method="POST" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
             {% csrf_token %}
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
 
-            <div class="mb-3">
+            {{ user_form.username.label_tag }} {{ user_form.username }}<br>
+            {{ user_form.email.label_tag }} {{ user_form.email }}<br>
+            {{ user_form.password.label_tag }} {{ user_form.password }}<br>
+
+            {{ profile_form.bio.label_tag }} {{ profile_form.bio }}<br>
+            {{ profile_form.course.label_tag }} {{ profile_form.course }}<br>
+
+            {{ profile_form.image.label_tag }} {{ profile_form.image }}
+
+            <div class="mb-3 mt-3">
                 <label class="form-label">Profile Picture Preview:</label><br>
                 <img id="preview" src="#" alt="Image Preview" style="display:none; max-width: 150px;" class="img-thumbnail mt-2">
-
                 <div id="remove-btn-container" class="mt-2" style="display: none;">
                     <button type="button" id="remove-image" class="btn btn-sm btn-outline-danger">Remove Image</button>
                 </div>
@@ -33,12 +41,13 @@
             <div class="alert alert-danger mt-3">{{ profile_form.errors }}</div>
         {% endif %}
     {% endif %}
+
     {% if not registered %}
         <p class="mt-3">Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
     {% endif %}
 
     <p class="mt-2">
-        <a href="{% url 'unidfood:home' %}" class="btn btn-secondary" data-bs-toggle="tooltip" title="Return to the homepage">
+        <a href="{% url 'unidfood:home' %}" class="btn btn-secondary">
             Back to Home
         </a>
     </p>
