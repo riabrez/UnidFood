@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
@@ -211,15 +213,13 @@ def deals(request):
     return render(request, 'unidfood/deals.html', {'deals': deals})
 
 def places(request):
-    restaurant_cat = PlaceCategory.objects.get(name='Restaurant')
-    bar_cat = PlaceCategory.objects.get(name='Bar')
-    cafe_cat = PlaceCategory.objects.get(name='Cafe')
+    categories = PlaceCategory.objects.all()
+    category_places = defaultdict(list)
+    for category in categories:
+        for place in Place.objects.filter(category=category).order_by('-rating')[:3]:
+            category_places[category].append(place)
 
-    restaurants = Place.objects.filter(category=restaurant_cat).order_by('-rating')[:3]
-    bars = Place.objects.filter(category=bar_cat).order_by('-rating')[:3]
-    cafes = Place.objects.filter(category=cafe_cat).order_by('-rating')[:3]
-
-    return render(request, 'unidfood/places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
+    return render(request, 'unidfood/places.html', {'category_places': dict(category_places),})
 
 def place_detail(request, place_id):
     place = get_object_or_404(Place, id=place_id)

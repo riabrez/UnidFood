@@ -29,9 +29,9 @@ def populate():
     }
     
     categories = {
-        "Restaurant": add_category("Restaurant"),
-        "Cafe": add_category("Cafe"),
-        "Pub": add_category("Pub"),
+        "Restaurant": add_category("Restaurant", "Restaurants"),
+        "Cafe": add_category("Cafe", "Cafes"),
+        "Bar": add_category("Bar", "Bars"),
     }
     
     places = [
@@ -48,6 +48,18 @@ def populate():
             description = ""
         ),
         add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 3",
+            address     = "Address 9",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 4",
+            address     = "Address 7",
+            description = ""
+        ),
+        add_place(
             category    = categories["Cafe"],
             name        = "Cafe 1",
             address     = "Address 3",
@@ -60,14 +72,14 @@ def populate():
             description = ""
         ),
         add_place(
-            category    = categories["Pub"],
-            name        = "Pub 1",
+            category    = categories["Bar"],
+            name        = "Bar 1",
             address     = "Address 5",
             description = ""
         ),
         add_place(
-            category    = categories["Pub"],
-            name        = "Pub 2",
+            category    = categories["Bar"],
+            name        = "Bar 2",
             address     = "Address 6",
             description = ""
         ),
@@ -170,8 +182,8 @@ def add_user_profile(user, image):
         print("Created user profile for", user.name)
     return profile
 
-def add_category(name):
-    category, created = PlaceCategory.objects.get_or_create(name=name)
+def add_category(name, plural_name):
+    category, created = PlaceCategory.objects.get_or_create(name=name, defaults={"plural_name": plural_name})
     if created:
         print("Created category", name)
     return category
