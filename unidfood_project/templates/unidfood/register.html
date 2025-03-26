@@ -1,70 +1,36 @@
 {% extends 'unidfood/base.html' %}
 
 {% block content %}
-<div class="container">
-    <h2>Register</h2>
-    <form method="POST" enctype="multipart/form-data">  <!-- Added enctype for file uploads -->
+<div class="register-container container">
+    <h2 class="register-title">Create Your Account</h2>
+    <p class="register-description">Sign up to join the community and start exploring exclusive content and deals!</p>
+    
+    <form method="POST" class="register-form">
         {% csrf_token %}
-        
-        <!-- Username Field -->
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" value="{{ user_form.username.value }}" required>
-        {% if user_form.username.errors %}
-            <ul class="errorlist">
-                {% for error in user_form.username.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
 
-        <!-- Email Field -->
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="{{ user_form.email.value }}" required>
-        {% if user_form.email.errors %}
-            <ul class="errorlist">
-                {% for error in user_form.email.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" id="username" class="form-input" required>
+        </div>
 
-        <!-- Password Field -->
-        <label for="password1">Password:</label>
-        <input type="password" name="password1" id="password1" required>
-        {% if user_form.password.errors %}
-            <ul class="errorlist">
-                {% for error in user_form.password.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-input" required>
+        </div>
 
-        <!-- Confirm Password Field -->
-        <label for="password2">Confirm Password:</label>
-        <input type="password" name="password2" id="password2" required>
-        {% if user_form.password2.errors %}
-            <ul class="errorlist">
-                {% for error in user_form.password2.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <div class="form-group">
+            <label for="password1" class="form-label">Create Password</label>
+            <input type="password" name="password1" id="password1" class="form-input" required>
+        </div>
 
-        <!-- Profile Image Field -->
-        <label for="image">Profile Image (optional):</label>
-        <input type="file" name="image" id="image">
-        {% if profile_form.image.errors %}
-            <ul class="errorlist">
-                {% for error in profile_form.image.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        <div class="form-group">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input type="password" name="password2" id="password2" class="form-input" required>
+        </div>
 
-        <!-- Submit Button -->
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-dark btn-register">Register Now</button>
     </form>
 
-    <p>Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
+    <p class="login-link">Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
 </div>
 {% endblock %}

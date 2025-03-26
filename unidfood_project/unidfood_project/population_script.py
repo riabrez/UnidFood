@@ -48,13 +48,25 @@ def populate():
             description = ""
         ),
         add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 3",
+            address     = "Address 9",
+            description = ""
+        ),
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "Restaurant 4",
+            address     = "Address 7",
+            description = ""
+        ),
+        add_place(
             category    = categories["Cafe"],
             name        = "Cafe 1",
             address     = "Address 3",
             description = ""
         ),
         add_place(
-            category    = categories["Bar"],
+            category    = categories["Cafe"],
             name        = "Cafe 2",
             address     = "Address 4",
             description = ""

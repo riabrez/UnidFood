@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
 from unidfood.models import UserProfile, Review, Meetup, Invitation, Deal, Place, PlaceCategory
 from django.contrib.auth.decorators import login_required
@@ -102,35 +103,54 @@ def my_account(request):
     except UserProfile.DoesNotExist:
         profile = None
     
-    if profile:
-        profile_form = UserProfileForm(instance=profile)
-    else:
-        profile_form = UserProfileForm() 
-    
+    profile_form = UserProfileForm(instance=profile) if profile else UserProfileForm()
+
+    return render(request, 'unidfood/my_account.html', {'user_form': user_form, 'profile_form': profile_form})
+
+@login_required
+def edit_account(request):
+    user = request.user
+    profile = user.userprofile
+
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
+        user_form = UserForm(request.POST, instance=user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            profile = profile_form.save(commit=False)
-            profile.user = request.user
-            profile.save()
+            profile_form.save()
+            messages.success(request, "Your profile has been updated.")
             return redirect('unidfood:my_account')
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = UserProfileForm(instance=profile)
 
-        if 'change_password' in request.POST:
-            new_password = request.POST.get('password1')
-            confirm_password = request.POST.get('password2')
+    return render(request, 'unidfood/edit_account.html', {'user_form': user_form, 'profile_form': profile_form})
 
-            if new_password != confirm_password:
-                password_errors = "Passwords do not match."
-            else:
-                request.user.set_password(new_password)
-                request.user.save()
-                update_session_auth_hash(request, request.user)
-                return redirect('unidfood:my_account')
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect('unidfood:goodbye')
+    return render(request, 'unidfood/delete_account.html')
+                  
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  
+            messages.success(request, "Your password has been changed successfully.")
+            return redirect('account:profile')
+    else:
+        form = PasswordChangeForm(user=request.user)
 
-    return render(request, 'unidfood/my_account.html', {'user_form': user_form, 'profile_form': profile_form, 'password_errors': password_errors if 'password_errors' in locals() else None})
+    return render(request, 'account/change_password.html', {'form': form})
+
+def goodbye(request):
+    return render(request, 'account/goodbye.html')
 
 @login_required
 def my_reviews(request):
@@ -195,9 +215,9 @@ def places(request):
     bar_cat = PlaceCategory.objects.get(name='Bar')
     cafe_cat = PlaceCategory.objects.get(name='Cafe')
 
-    restaurants = Place.objects.filter(category=restaurant_cat)[:3]
-    bars = Place.objects.filter(category=bar_cat)[:3]
-    cafes = Place.objects.filter(category=cafe_cat)[:3]
+    restaurants = Place.objects.filter(category=restaurant_cat).order_by('-rating')[:3]
+    bars = Place.objects.filter(category=bar_cat).order_by('-rating')[:3]
+    cafes = Place.objects.filter(category=cafe_cat).order_by('-rating')[:3]
 
     return render(request, 'unidfood/places.html', {'restaurants': restaurants, 'bars': bars, 'cafes': cafes, })
 
@@ -217,3 +237,17 @@ def search(request):
         results = Place.objects.filter(name__icontains=query)
 
     return render(request, 'unidfood/search_results.html', {'query': query, 'results': results})
+
+def fetch_places(request):
+    query = request.GET.get("q", "")
+
+    places = Place.objects.filter(name__icontains=query)[:5] 
+
+    data = [{
+        "name": place.name,
+        "category": place.category.name,  
+        "address": place.address,
+    } for place in places
+    ]
+
+    return JsonResponse(data, safe=False)

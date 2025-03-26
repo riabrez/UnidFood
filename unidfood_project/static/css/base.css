@@ -1,0 +1,43 @@
+/* Box Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Universal styling */
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Schibsted Grotesk'; 
+    font-size: 16px;
+}
+
+main {
+    flex: 1; 
+}
+
+header {
+    position: sticky;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 10;
+}
+
+/* Box-sizing set on all elements */
+* {
+    box-sizing: border-box;
+}

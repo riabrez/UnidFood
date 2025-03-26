@@ -3,26 +3,37 @@
 {% block title %}Edit Account{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>Edit Account</h1>
+<div class="container col-md-8 offset-md-2">
+    <h2 class="mb-4">Edit Your Profile</h2>
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    <form method="POST" enctype="multipart/form-data" class="border p-4 rounded bg-light">
+        {% csrf_token %}
+        
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
+        <div class="mb-3">
+            <label class="form-label">Profile Picture Preview:</label><br>
+            {% if user.userprofile.image %}
+                <img id="preview" src="{{ user.userprofile.image.url }}" class="img-thumbnail mb-2" width="150">
+            {% else %}
+                <img id="preview" src="#" style="display: none;" class="img-thumbnail mb-2" width="150">
+            {% endif %}
+        </div>
 
-            <button type="submit">Save Changes</button>
-        </form>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+</div>
 
-        <hr>
-        <p><a href="{% url 'unidfood:my_account' %}">Back to My Account</a></p>
-    </div>
+<script>
+    document.getElementById("id_image").addEventListener("change", function(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const preview = document.getElementById("preview");
+            preview.src = reader.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
 {% endblock %}

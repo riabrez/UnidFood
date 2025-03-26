@@ -23,6 +23,7 @@ class Place(models.Model):
     category = models.ForeignKey(PlaceCategory, on_delete=models.PROTECT)
     address = models.CharField(max_length=300)
     description = models.CharField(max_length=300, blank=True)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
 
     def __str__(self):
         return self.name

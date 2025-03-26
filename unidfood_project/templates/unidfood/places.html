@@ -3,40 +3,59 @@
 {% block title %}Places{% endblock %}
 
 {% block content %}
-    <h2>Browse Places</h2>
-    <p>Explore popular restaurants, bars, and cafes near you.</p>
+    <div class="container">
+        <h2 class="text-center mb-4">Browse Places</h2>
+        <p class="text-center">Explore popular restaurants, bars, and cafes near you.</p>
 
-    <!-- Restaurants Section -->
-    <h3>Top Restaurants</h3>
-    <ul>
-        {% for place in restaurants %}
-            <li>
-                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
-                Description: {{ place.description }}
-            </li>
-        {% endfor %}
-    </ul>
+        <!-- Restaurants Section -->
+        <h3 class="mt-4">Top Restaurants</h3>
+        <ul class="list-group">
+            {% for place in restaurants %}
+                <li class="list-group-item">
+                    <h5>{{ place.name }}</h5>
+                    <p><strong>Address:</strong> {{ place.address }}</p>
+                    {% if place.rating %}
+                        <p><strong>Rating:</strong> {{ place.rating }}/5</p>
+                    {% endif %}
+                    <p>{{ place.description }}</p>
+                </li>
+            {% empty %}
+                <p>No restaurants found.</p>
+            {% endfor %}
+        </ul>
 
-    <!-- Bars Section -->
-    <h3>Top Bars</h3>
-    <ul>
-        {% for place in bars %}
-            <li>
-                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
-                Description: {{ place.description }}
-            </li>
-        {% endfor %}
-    </ul>
+        <!-- Bars Section -->
+        <h3 class="mt-4">Top Bars</h3>
+        <ul class="list-group">
+            {% for place in bars %}
+                <li class="list-group-item">
+                    <h5>{{ place.name }}</h5>
+                    <p><strong>Address:</strong> {{ place.address }}</p>
+                    {% if place.rating %}
+                        <p><strong>Rating:</strong> {{ place.rating }}/5</p>
+                    {% endif %}
+                    <p>{{ place.description }}</p>
+                </li>
+            {% empty %}
+                <p>No bars found.</p>
+            {% endfor %}
+        </ul>
 
-    <!-- Cafes Section -->
-    <h3>Top Cafes</h3>
-    <ul>
-        {% for place in cafes %}
-            <li>
-                <strong>{{ place.name }}</strong> (Category: {{ place.category.name }}) - Address: {{ place.address }}<br>
-                Description: {{ place.description }}
-            </li>
-        {% endfor %}
-    </ul>
-
+        <!-- Cafes Section -->
+        <h3 class="mt-4">Top Cafes</h3>
+        <ul class="list-group">
+            {% for place in cafes %}
+                <li class="list-group-item">
+                    <h5>{{ place.name }}</h5>
+                    <p><strong>Address:</strong> {{ place.address }}</p>
+                    {% if place.rating %}
+                        <p><strong>Rating:</strong> {{ place.rating }}/5</p>
+                    {% endif %}
+                    <p>{{ place.description }}</p>
+                </li>
+            {% empty %}
+                <p>No cafes found.</p>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
