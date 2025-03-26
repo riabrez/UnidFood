@@ -1,34 +1,57 @@
-/* Reset and universal styling */
+/* Box Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
     margin: 0;
-    padding: 0;
 }
 
-/* Ensure full-page layout */
+/* Universal styling */
 body {
     display: flex;
     flex-direction: column;
-    font-family: 'Schibsted Grotesk';
+    font-family: 'Schibsted Grotesk'; 
     font-size: 16px;
+    min-height: 100vh;
+    background-color: #f8f9fa; 
 }
 
-/* Make sure main content expands */
-main {
-    flex: 1;
-}
-
-header {
+/* Sticky Navbar */
+.navbar {
     position: sticky;
+    top: 0;
+    z-index: 1000;  
+    width: 100%;
+    background-color: #ffffff; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
 }
 
 /* Footer */
 footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 30px; 
+    background-color: #f1f1f1; 
+    text-align: center;
+    position: relative;
     width: 100%;
-    margin-top: auto; 
-    padding: 10px 0;
+    color: #212529; 
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); 
 }
-/* Box-sizing set on all elements */
-* {
-    box-sizing: border-box;
+
+/* Main content should expand, taking the remaining space */
+.container-fluid {
+    flex: 1;  
+}
+
+/* Ensuring footer stays at the bottom if there is not enough content */
+footer {
+    margin-top: auto; 
+    background-color: #f8f9fa;
+    text-align: center;
+    color: #212529; 
 }
