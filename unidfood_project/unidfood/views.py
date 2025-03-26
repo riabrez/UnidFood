@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from unidfood.forms import UserForm, UserProfileForm, ReviewForm
@@ -138,3 +138,15 @@ def nearby(request):
 
 def search(request):
     return HttpResponse("TODO: search view")
+
+def fetch_places(request):
+    places = Place.objects.all()[:5]  
+
+    data = [{
+        "name": place.name,
+        "category": place.category.name,  
+        "address": place.address,
+        "description": place.description,
+    } for place in places]
+
+    return JsonResponse(data, safe=False)
