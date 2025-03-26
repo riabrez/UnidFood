@@ -89,7 +89,6 @@ def my_reviews(request):
     reviews = Review.objects.filter(user=request.user)
     return render(request, 'unidfood/my_reviews.html', {'reviews': reviews})
 
-
 @login_required
 def my_meetups(request):
     meetups = Meetup.objects.filter(user=request.user) 
@@ -148,12 +147,11 @@ def search(request):
 @login_required
 def profile(request):
     user_profile = request.user.userprofile
-    friends = user_profile.friends.all()
+
     return render(request, 'account/profile.html', {
         'user_profile': user_profile,
-        'friends': friends,
-        'friend_count': friends.count()
     })
+
 
 @login_required
 def edit_profile(request):

@@ -1,0 +1,17 @@
+{% extends 'unidfood/base.html' %}
+
+{% block title %}{{ place.name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ place.name }}</h2>
+    <p><strong>Category:</strong> {{ place.category.name }}</p>
+    <p><strong>Address:</strong> {{ place.address }}</p>
+
+    {% if place.description %}
+        <p><strong>Description:</strong> {{ place.description }}</p>
+    {% else %}
+        <p><em>No description available.</em></p>
+    {% endif %}
+
+    <a href="{% url 'unidfood:places' %}">Back to all places</a>
+{% endblock %}

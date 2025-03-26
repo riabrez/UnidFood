@@ -1,0 +1,19 @@
+{% extends 'unidfood/base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h2 class="mb-4">My Profile</h2>
+
+    {% if user.userprofile.image %}
+        <img src="{{ user.userprofile.image.url }}" class="img-thumbnail mb-3" width="150" alt="Profile Picture">
+    {% endif %}
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <a href="{% url 'unidfood:edit_profile' %}" class="btn btn-primary mt-2">Edit Profile</a>
+    <a href="{% url 'unidfood:delete_account' %}" class="btn btn-danger mt-2">Delete Account</a>
+</div>
+{% endblock %}

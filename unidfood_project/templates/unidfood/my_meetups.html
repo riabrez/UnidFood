@@ -1,0 +1,40 @@
+{% extends 'unidfood/base.html' %}
+
+{% block content %}
+  <h2>My Meetups</h2>
+  
+  {% if meetups %}
+    <ul>
+      {% for meetup in meetups %}
+        <li>
+          <strong>{{ meetup.place }}</strong> at {{ meetup.time }}
+          <p>{{ meetup.details }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't scheduled any meetups.</p>
+  {% endif %}
+
+  <h2>Meetup Invitations</h2>
+
+  {% if invitations %}
+    <ul>
+      {% for invitation in invitations %}
+        <li>
+          <strong>Meetup at {{ invitation.meetup.place }}</strong> on {{ invitation.meetup.time }}
+          <p>{{ invitation.meetup.details }}</p>
+
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="invitation_id" value="{{ invitation.id }}">
+            <button type="submit" name="action" value="accept">Accept</button>
+            <button type="submit" name="action" value="decline">Decline</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no invitations.</p>
+  {% endif %}
+{% endblock %}
