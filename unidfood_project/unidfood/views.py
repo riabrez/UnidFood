@@ -140,13 +140,15 @@ def search(request):
     return HttpResponse("TODO: search view")
 
 def fetch_places(request):
-    places = Place.objects.all()[:5]  
+    query = request.GET.get("q", "")
+
+    places = Place.objects.filter(name__icontains=query)[:5] 
 
     data = [{
         "name": place.name,
         "category": place.category.name,  
         "address": place.address,
-        "description": place.description,
-    } for place in places]
+    } for place in places
+    ]
 
     return JsonResponse(data, safe=False)

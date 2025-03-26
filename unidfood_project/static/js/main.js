@@ -57,39 +57,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search");
     const resultsDiv = document.getElementById("results");
 
-    if (!searchInput || !resultsDiv) return; 
+    if (!searchInput || !resultsDiv) return;
 
     searchInput.addEventListener("keyup", function () {
-        let query = searchInput.value;
+        let query = searchInput.value.trim();
 
         if (query.length > 2) {
-        
             fetch(`/search/?q=${query}`, {
-                method: 'GET',
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"  
-                }
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
             })
-            .then(response => response.json())  
+            .then(response => response.json())
             .then(data => {
-               
                 resultsDiv.innerHTML = "";
 
-               
+                localStorage.setItem("searchResults", JSON.stringify(data));
+
                 data.forEach(place => {
                     let div = document.createElement("div");
-                    div.innerHTML = `<strong>${place.name}</strong> - ${place.rating ? place.rating + "⭐" : "No rating"}`;
+                    div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
                     resultsDiv.appendChild(div);
                 });
             })
-            .catch(error => {
-                console.error("Error fetching search results:", error);
-            });
+            .catch(error => console.error("Error fetching search results:", error));
         } else {
             resultsDiv.innerHTML = "";
         }
     });
 });
+
 
 function fetchPlaces() {
     fetch("/fetch_places/")  

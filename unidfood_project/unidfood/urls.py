@@ -16,4 +16,5 @@ urlpatterns = [
     path('nearby/', views.nearby, name='nearby'),
     path('search/', views.search, name='search'),
     path('fetch_places/', views.fetch_places, name='fetch_places'),
+    path('search/', views.fetch_places, name='fetch_places'),
 ]
