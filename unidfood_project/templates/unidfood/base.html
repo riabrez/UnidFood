@@ -1,20 +1,18 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UnidFood</title>
-    <link href='https://fonts.googleapis.com/css?family=Schibsted Grotesk' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Schibsted+Grotesk" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-
+    
     <!-- Page-specific styles will be included here -->
     {% block extra_styles %}
     {% endblock %}
-    
 </head>
 <body>
 
@@ -40,14 +38,18 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container-fluid px-0">
         {% block content %}
         {% endblock %}
     </div>
 
     <!-- Footer -->
-    <footer class="bg-light text-black text-center py-3 mt-5 ">
-        <p>&copy; 2025 UnidFood. </p>
+    <footer class="bg-light text-black text-center py-3 mt-auto">
+        <p>&copy; 2025 UnidFood.</p>
     </footer>
+
+    <!-- Empty block for extra scripts -->
+    {% block extra_scripts %}
+    {% endblock %}
 </body>
 </html>
