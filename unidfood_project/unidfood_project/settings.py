@@ -25,7 +25,7 @@ SECRET_KEY = '5f5ntv4qf)=&nd%&+($fx8b1_awdttakrsnr4!fdwd#bnchtx('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['unidfood.pythonanywhere.com']
 
 
 # Application definition
@@ -118,5 +118,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = '/var/www/unidfood/static'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+STATIC_URL = '/static/' 
 LOGIN_URL ='unidfood:login'
