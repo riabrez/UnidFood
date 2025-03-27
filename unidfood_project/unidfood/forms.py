@@ -4,15 +4,14 @@ from unidfood.models import UserProfile, Review, Place
 from unidfood.models import UserProfile
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        fields = ('username', 'email',)
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('image', 'bio', 'location', 'course')
+        fields = ('image', 'bio', 'course')
 
 class ReviewForm(forms.ModelForm):
     place = forms.ModelChoiceField(

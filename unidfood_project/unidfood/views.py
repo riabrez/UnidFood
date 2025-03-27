@@ -151,31 +151,31 @@ def profile(request):
     return render(request, 'account/profile.html', {
         'user_profile': user_profile,
     })
-
-
 @login_required
 def edit_profile(request):
-    user = request.user
-    profile = user.userprofile
+    user_profile = request.user.userprofile
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=user)
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, "Your profile has been updated.")
-            return redirect('account:profile')
+            messages.success(request, "Profile updated successfully!")
+            return redirect('unidfood:profile') 
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        user_form = UserForm(instance=user)
-        profile_form = UserProfileForm(instance=profile)
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
 
     return render(request, 'account/edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form
     })
 
+    
 @login_required
 def delete_account(request):
     if request.method == 'POST':
