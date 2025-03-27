@@ -4,11 +4,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="profile_images", blank=True, null=True)
+    image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    course = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
-    
+
 class PlaceCategory(models.Model):
     name = models.CharField(max_length=40, unique=True)
     

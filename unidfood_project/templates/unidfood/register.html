@@ -1,43 +1,86 @@
+register.html
 {% extends 'unidfood/base.html' %}
-
+ 
 {% block title %}Register{% endblock %}
-
-{% block extra_styles %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
-{% endblock %}
-
+ 
 {% block content %}
-<div class="register-container container">
-    <h2 class="register-title">Create Your Account</h2>
-    <p class="register-description">Sign up to join the community and start exploring exclusive content and deals!</p>
-    
-    <form method="POST" class="register-form">
-        {% csrf_token %}
-
-        <div class="form-group">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" id="username" class="form-input" required>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+ 
+<div class="container col-md-6 offset-md-3">
+    <h2 class="mb-4">Register</h2>
+ 
+    {% if registered %}
+        <div class="alert alert-success">
+            Registration successful! <a href="{% url 'unidfood:login' %}">Login here</a>.
         </div>
-
-        <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password1" class="form-label">Create Password</label>
-            <input type="password" name="password1" id="password1" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-            <label for="password2" class="form-label">Confirm Password</label>
-            <input type="password" name="password2" id="password2" class="form-input" required>
-        </div>
-
-        <button type="submit" class="btn btn-dark btn-register">Register Now</button>
-    </form>
-
-    <p class="login-link">Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
+    {% else %}
+        <form method="POST" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
+            {% csrf_token %}
+ 
+            {{ user_form.username.label_tag }} {{ user_form.username }}<br>
+            {{ user_form.email.label_tag }} {{ user_form.email }}<br>
+            {{ user_form.password.label_tag }} {{ user_form.password }}<br>
+ 
+            {{ profile_form.bio.label_tag }} {{ profile_form.bio }}<br>
+            {{ profile_form.course.label_tag }} {{ profile_form.course }}<br>
+ 
+            {{ profile_form.image.label_tag }} {{ profile_form.image }}
+ 
+            <div class="mb-3 mt-3">
+                <label class="form-label">Profile Picture Preview:</label><br>
+                <img id="preview" src="#" alt="Image Preview" style="display:none; max-width: 150px;" class="img-thumbnail mt-2">
+                <div id="remove-btn-container" class="mt-2" style="display: none;">
+                    <button type="button" id="remove-image" class="btn btn-sm btn-outline-danger">Remove Image</button>
+                </div>
+            </div>
+ 
+            <button type="submit" class="btn btn-success">Register</button>
+        </form>
+ 
+        {% if user_form.errors %}
+            <div class="alert alert-danger mt-3">{{ user_form.errors }}</div>
+        {% endif %}
+        {% if profile_form.errors %}
+            <div class="alert alert-danger mt-3">{{ profile_form.errors }}</div>
+        {% endif %}
+    {% endif %}
+ 
+    {% if not registered %}
+        <p class="mt-3">Already have an account? <a href="{% url 'unidfood:login' %}">Login here</a></p>
+    {% endif %}
+ 
+    <p class="mt-2">
+        <a href="{% url 'unidfood:home' %}" class="btn btn-secondary">
+            Back to Home
+        </a>
+    </p>
 </div>
+ 
+<script>
+    const imageInput = document.getElementById("id_image");
+    const preview = document.getElementById("preview");
+    const removeBtn = document.getElementById("remove-image");
+    const removeBtnContainer = document.getElementById("remove-btn-container");
+ 
+    imageInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                preview.src = reader.result;
+                preview.style.display = "block";
+                removeBtnContainer.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+ 
+    removeBtn.addEventListener("click", function() {
+        imageInput.value = "";
+        preview.src = "#";
+        preview.style.display = "none";
+        removeBtnContainer.style.display = "none";
+    });
+</script>
 {% endblock %}
