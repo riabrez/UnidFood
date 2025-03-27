@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     
 class PlaceCategory(models.Model):
     name = models.CharField(max_length=40, unique=True)
+    plural_name = models.CharField(max_length=40)
     
     class Meta:
         verbose_name_plural = "Place categories"
