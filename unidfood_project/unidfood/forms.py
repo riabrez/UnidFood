@@ -21,7 +21,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['image']
+        fields = ('image',)
 
 class ReviewForm(forms.ModelForm):
     rating = forms.IntegerField(
@@ -57,16 +57,3 @@ class ReviewForm(forms.ModelForm):
             self.add_error('rating', "Rating must be between 1 and 5.")
 
         return cleaned_data
-    
-    # def save(self, commit=True):
-    #     print("HERE")
-    #     review = super().save(commit=False)
-    #     review.user = self.user
-    #     review.place = self.place
-    #     if commit:
-    #         Review.objects.update_or_create(
-    #             user=self.user,
-    #             place=self.place,
-    #             defaults={'rating': review.rating, 'comment': review.comment}
-    #         )
-    #     return review
