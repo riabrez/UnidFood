@@ -55,3 +55,16 @@ footer {
     text-align: center;
     color: #212529; 
 }
+
+/* Adds spacing and fade effect for the dropdown */
+.navbar-collapse {
+    margin-top: 10px; 
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.navbar-collapse.show {
+    opacity: 1;
+    transform: translateY(0);
+}
