@@ -120,16 +120,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# Specify where to look for static files
 STATIC_URL = '/static/'
-LOGIN_URL ='unidfood:login'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@unidfood.com'
-PASSWORD_RESET_CONFIRM_URL_NAME = 'unidfood:password_reset_confirm'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-
+LOGIN_URL ='unidfood:login'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@unidfood.com'
+PASSWORD_RESET_CONFIRM_URL_NAME = 'unidfood:password_reset_confirm'
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',

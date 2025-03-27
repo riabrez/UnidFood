@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +7,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}UniDFood{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link href="https://fonts.googleapis.com/css?family=Schibsted+Grotesk" rel="stylesheet">
+    <!-- Navbar collapse functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <!-- Page-specific styles will be included here -->
+    {% block extra_styles %}
+    {% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-5">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'unidfood:home' %}">UniDFood</a>
+            <a class="navbar-brand" href="{% url 'unidfood:home' %}">UnidFood</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Navigation links -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:deals' %}">Deals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:places' %}">Places</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:nearby' %}">Nearby</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:my_meetups' %}">Meetups</a></li>
+                    {% endif %}
+                </ul>
+
+                <!-- Search bar -->
+                <form class="d-flex ms-auto" method="get" role="search" action="{% url 'unidfood:search' %}">
+                    <div class="input-group w-100 w-md-50 w-lg-25">
+                        <input class="form-control" type="search" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                          <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                </form>
+
+                <!-- User links -->
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link">Welcome, {{ user.username }}</a></li>
@@ -29,21 +64,27 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container mt-4">
+    <!-- Main Content Area -->
+    <div class="container-fluid px-0 flex-grow-1">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-info">{{ message }}</div>
             {% endfor %}
         {% endif %}
+
         {% block content %}
         {% endblock %}
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>&copy; 2025 UniDFood.</p>
+    <footer class="bg-light text-black text-center py-3 mt-auto">
+        <p>&copy; 2025 UnidFood.</p>
     </footer>
-    
+
+    <!-- Empty block for extra scripts -->
+    {% block extra_scripts %}
+    {% endblock %}
+
 </body>
 </html>
+
