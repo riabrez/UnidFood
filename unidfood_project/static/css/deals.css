@@ -1,0 +1,68 @@
+/* General Page Styling */
+html, body {
+    background-color: #f8f9fa;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
+/* Deals Container */
+.deals-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto; 
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Unidays iFrame */
+iframe {
+    width: 100%;
+    min-height: 80vh;
+    border: none;
+    display: block;
+    border-radius: 12px;
+}
+
+
+/* Deals List */
+.deals-list {
+    list-style: none;
+    padding: 0;
+}
+
+.deals-list li {
+    background: #ffffff;
+    border-left: 5px solid #323f4e;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deals-list strong {
+    font-size: 1.2em;
+    color: #000000;
+}
+
+.deals-list p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+/* No Deals Message */
+.no-deals {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #777;
+    margin-top: 20px;
+}
+
+.container-fluid {
+    flex-grow: 1;
+    padding-bottom: 20px; /* Avoids overlap */
+}

@@ -1,0 +1,30 @@
+{% extends 'unidfood/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Search Results</h2>
+
+        {% if query %}
+            <p>Results for "<strong>{{ query }}</strong>":</p>
+            
+            {% if results %}
+                <ul class="list-group">
+                    {% for place in results %}
+                        <li class="list-group-item">
+                            <h5>{{ place.name }}</h5>
+                            <p><strong>Category:</strong> {{ place.category.name }}</p>
+                            <p><strong>Address:</strong> {{ place.address }}</p>
+                            <p><strong>Description:</strong> {{ place.description }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No places found matching your search.</p>
+            {% endif %}
+        {% else %}
+            <p>Please enter a search query.</p>
+        {% endif %}
+    </div>
+{% endblock %}

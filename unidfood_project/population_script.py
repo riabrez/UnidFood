@@ -12,65 +12,110 @@ from unidfood.models import UserProfile, PlaceCategory, Place, Review, Deal, Mee
 def populate():
     users = {
         "user1": add_user(
-            username = "user1",
-            email    = "user1@gmail.com",
-            password = "password123"
+            username   = "brendanh",
+            email      = "brendan.hodge1@gmail.com",
+            password   = "password123",
+            first_name = "Brendan",
+            last_name  = "Hodge",
         ),
         "user2": add_user(
-            username = "user2",
-            email    = "user2@outlook.com",
-            password = "123456"
+            username   = "hannaburgess",
+            email      = "hburgess05@outlook.com",
+            password   = "123456",
+            first_name = "Hanna",
+            last_name  = "Burgess",
         ),
         "user3": add_user(
-            username = "user3",
-            email    = "user3@hotmail.com",
-            password = "f3q2odhi9x"
+            username   = "valfernandez",
+            email      = "valerafernandez3@gmail.com",
+            password   = "amenity-lake-tinfoil",
+            first_name = "Valero",
+            last_name  = "Fernández",
+        ),
+        "user4": add_user(
+            username   = "lixao",
+            email      = "lixao214@hotmail.com",
+            password   = "f3q2odhi9x",
+            first_name = "Li",
+            last_name  = "Xao",
+        ),
+        "user5": add_user(
+            username   = "nicholeward",
+            email      = "nicholewardd@gmail.com",
+            password   = "letmein",
+            first_name = "Nichole",
+            last_name  = "Ward",
+        ),
+        "user6": add_user(
+            username   = "michaelahomann",
+            email      = "michaelahomann@icloud.com",
+            password   = "tropical-enlighten-uncoiled-cruelness",
+            first_name = "Michaela",
+            last_name  = "Homann",
+        ),
+        "user7": add_user(
+            username   = "stefakselsen",
+            email      = "stefakselsen@gmail.com",
+            password   = "rW0HsrhiVu",
+            first_name = "Stefan",
+            last_name  = "Akselsen"
         ),
     }
     
     categories = {
-        "Restaurant": add_category("Restaurant"),
-        "Cafe": add_category("Cafe"),
-        "Bar": add_category("Bar"),
+        "Restaurant": add_category("Restaurant", "Restaurants"),
+        "Cafe": add_category("Cafe", "Cafes"),
+        "Bar": add_category("Bar", "Bars"),
     }
     
     places = [
         add_place(
             category    = categories["Restaurant"],
-            name        = "Restaurant 1",
-            address     = "Address 1",
-            description = ""
-        ),
+            name        = "Marino's",
+            address     = "23 Calderwood Road, Glasgow G43 2RP",
+            description = "Authentic Italian pizza from the Marino family. Family friendly atmosphere with something for everyone."),
+        
         add_place(
             category    = categories["Restaurant"],
-            name        = "Restaurant 2",
-            address     = "Address 2",
-            description = ""
-        ),
+            name        = "The Brass Juniper",
+            address     = "187 Langside Road, Glasgow G42 7BX",
+            description = "A stylish brasserie serving hearty dishes like braised lamb shank and gin-infused desserts.",),
+
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "La Luna Tacos",
+            address     = "9 Broomhill Road, Glasgow G11 7QA",
+            description = "A lively taqueria serving authentic Mexican street food.",),
+
+        add_place(
+            category    = categories["Restaurant"],
+            name        = "The Jade Pagoda",
+            address     = "112 Pollokshaws Road, Glasgow G41 1PX",
+            description = "An elegant spot offering dim sum and Cantonese classics in a zen setting.",),
+
         add_place(
             category    = categories["Cafe"],
-            name        = "Cafe 1",
-            address     = "Address 3",
-            description = ""
-        ),
+            name        = "Copper Kettle Café",
+            address     = "45 Drumchapel Road, Glasgow G15 6PL",
+            description = "A cozy nook with steampunk flair, serving bold espresso and scones.",),
+
+        add_place(
+            category    = categories["Cafe"],
+            name        = "Frosted Petals",
+            address     = "3 Nitshill Road, Glasgow G53 5QD",
+            description = "A whimsical bakery-café with floral teas and intricate pastries.",),
+        
         add_place(
             category    = categories["Bar"],
-            name        = "Cafe 2",
-            address     = "Address 4",
-            description = ""
-        ),
+            name        = "The Iron Stag",
+            address     = "14 High Street, Glasgow G1 4PQ",
+            description = "A snug bar with a wall of whiskies, live folk music, and a warm, local feel.",),
+
         add_place(
             category    = categories["Bar"],
-            name        = "Bar 1",
-            address     = "Address 5",
-            description = ""
-        ),
-        add_place(
-            category    = categories["Bar"],
-            name        = "Bar 2",
-            address     = "Address 6",
-            description = ""
-        ),
+            name        = "The Thistle & Crown",
+            address     = "27 Govan Road, Glasgow G51 1HJ",
+            description = "A cosy Scottish bar with a tartan-clad interior, serving single malts and haggis bites.",),
     ]
     
     now = datetime.now(tz=timezone.utc)
@@ -78,24 +123,31 @@ def populate():
     reviews = [
         add_review(
             user    = users["user1"],
-            place   = places[1],
+            place   = places[0],
             rating  = 5,
             time    = now,
-            content = ""
+            content = "Best pizza I've ever had 5/5"
+        ),
+        add_review(
+            user    = users["user3"],
+            place   = places[0],
+            rating  = 4,
+            time    = now - timedelta(days=1, hours=6, minutes=7, seconds=49),
+            content = "Good food though service could be better"
         ),
         add_review(
             user    = users["user2"],
             place   = places[3],
             rating  = 3,
             time    = now - timedelta(days=3, hours=6),
-            content = ""
+            content = "My food arrived cold"
         ),
         add_review(
             user    = users["user3"],
             place   = places[5],
             rating  = 1,
             time    = now - timedelta(days=400, hours=20, minutes=25),
-            content = ""
+            content = "Never going back, rude staff and overpriced"
         ),
     ]
     
@@ -151,27 +203,28 @@ def populate():
     ]
 
 
-def add_user(username, email, password):
-    try:
-        user = User.objects.get(username=username)
-    except ObjectDoesNotExist:
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password)
-        print("Created user", username)
+def add_user(username, email, password, first_name, last_name):
+    user = User.objects.get_or_create(username=username, defaults={
+        "email": email,
+        "password": password,
+        "first_name": first_name,
+        "last_name": last_name,
+    })[0]
+    
+    add_user_profile(user)
+    
     return user
 
-def add_user_profile(user, image):        
+def add_user_profile(user, image=None):        
     profile, created = UserProfile.objects.get_or_create(user=user)
     if created:
         profile.image = image
         profile.save()
-        print("Created user profile for", user.name)
+        print("Created user profile for", user.username)
     return profile
 
-def add_category(name):
-    category, created = PlaceCategory.objects.get_or_create(name=name)
+def add_category(name, plural_name):
+    category, created = PlaceCategory.objects.get_or_create(name=name, defaults={"plural_name": plural_name})
     if created:
         print("Created category", name)
     return category

@@ -103,5 +103,3 @@ function fetchPlaces() {
 }
 
 fetchPlaces();
-
-
