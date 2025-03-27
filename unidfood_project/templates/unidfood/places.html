@@ -13,7 +13,7 @@
                 <ul class="list-group">
                 {% for place in places %}
                     <li class="list-group-item">
-                        <a href="{% url 'unidfood:place_detail' place.id %}"><h5>{{ place.name }}</h5></a>
+                        <a href="{% url 'unidfood:place' place.id %}"><h5>{{ place.name }}</h5></a>
                         <p><strong>Address:</strong> {{ place.address }}</p>
                         {% if place.rating %}
                         <p><strong>Rating:</strong> {{ place.rating }}/5</p>
