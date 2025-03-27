@@ -52,3 +52,55 @@ function initMap() {
 document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("map")) loadGoogleMaps();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search");
+    const resultsDiv = document.getElementById("results");
+
+    if (!searchInput || !resultsDiv) return;
+
+    searchInput.addEventListener("keyup", function () {
+        let query = searchInput.value.trim();
+
+        if (query.length > 2) {
+            fetch(`/search/?q=${query}`, {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = "";
+
+                localStorage.setItem("searchResults", JSON.stringify(data));
+
+                data.forEach(place => {
+                    let div = document.createElement("div");
+                    div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
+                    resultsDiv.appendChild(div);
+                });
+            })
+            .catch(error => console.error("Error fetching search results:", error));
+        } else {
+            resultsDiv.innerHTML = "";
+        }
+    });
+});
+
+
+function fetchPlaces() {
+    fetch("/fetch_places/")  
+        .then(response => response.json())  
+        .then(data => {
+            console.log("Fetched Places Data:", data);  
+
+            localStorage.setItem("placesData", JSON.stringify(data));
+            
+            if (data.length > 0) {
+                console.log("First Place Name:", data[0].name);
+            }
+        })
+        .catch(error => console.error("Error fetching places:", error));
+}
+
+fetchPlaces();
+

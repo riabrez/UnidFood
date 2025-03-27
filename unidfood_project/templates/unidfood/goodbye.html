@@ -1,0 +1,11 @@
+{% extends 'unidfood/base.html' %}
+
+{% block title %}Goodbye{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h2 class="text-muted">Goodbye!</h2>
+    <p>Your account has been successfully deleted.</p>
+    <a href="{% url 'unidfood:home' %}" class="btn btn-primary">Return to Homepage</a>
+</div>
+{% endblock %}
