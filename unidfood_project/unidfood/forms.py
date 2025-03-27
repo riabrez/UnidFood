@@ -21,7 +21,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('image',)
+        fields = ('image', 'bio', 'course')
 
 class ReviewForm(forms.ModelForm):
     rating = forms.IntegerField(

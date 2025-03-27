@@ -1,0 +1,64 @@
+/* Base Card Style */
+.card {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+/* Headline */
+.card h3 {
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Form Inputs */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"],
+form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    background-color: #fff;
+    transition: border-color 0.2s;
+}
+
+/* Focus State */
+form input:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 6px rgba(13, 110, 253, 0.2);
+}
+
+/* Label Style */
+form label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Textarea (bio) */
+form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Register Button */
+button[type="submit"] {
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+/* Responsive fix */
+@media (max-width: 576px) {
+    .card {
+        padding: 20px;
+    }
+}

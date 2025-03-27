@@ -5,10 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UnidFood</title>
-    <link href="https://fonts.googleapis.com/css?family=Schibsted+Grotesk" rel="stylesheet">
+    <title>{% block title %}UniDFood{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link href="https://fonts.googleapis.com/css?family=Schibsted+Grotesk" rel="stylesheet">
+    <!-- Navbar collapse functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     <!-- Page-specific styles will be included here -->
@@ -37,7 +40,7 @@
 
                 <!-- Search bar -->
                 <form class="d-flex ms-auto" method="get" role="search" action="{% url 'unidfood:search' %}">
-                    <div class="input-group">
+                    <div class="input-group w-100 w-md-50 w-lg-25">
                         <input class="form-control" type="search" name="q" placeholder="Search">
                         <div class="input-group-append">
                           <button class="btn btn-secondary" type="submit">
@@ -50,7 +53,7 @@
                 <!-- User links -->
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="#">Welcome, {{ user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link">Welcome, {{ user.username }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:logout' %}">Logout</a></li>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'unidfood:login' %}">Login</a></li>
@@ -63,6 +66,12 @@
 
     <!-- Main Content Area -->
     <div class="container-fluid px-0 flex-grow-1">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </div>
@@ -77,4 +86,3 @@
     {% endblock %}
 
 </body>
-</html>

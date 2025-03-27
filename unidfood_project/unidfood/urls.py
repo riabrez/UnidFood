@@ -25,9 +25,14 @@ urlpatterns = [
     path('my_account/delete/', views.delete_account, name='delete_account'),
     path('change_password/', views.change_password, name='change_password'),
     path('goodbye/', views.goodbye, name='goodbye'),
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('profile/delete/', views.delete_account, name='delete_account'),
+    path('change_password/', views.change_password, name='change_password'),
+    path('goodbye/', views.goodbye, name='goodbye'),
     path('password_reset/', auth_views.PasswordResetView.as_view(
-        template_name='unidfood/password_reset.html',
-        email_template_name='unidfood/password_reset_email.html',
+        template_name='account/password_reset.html',
+        email_template_name='account/password_reset_email.html',
         success_url=reverse_lazy('unidfood:password_reset_done') 
     ), name='password_reset'),
 

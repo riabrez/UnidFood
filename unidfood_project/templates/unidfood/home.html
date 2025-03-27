@@ -1,15 +1,15 @@
 {% extends 'unidfood/base.html' %}
 
 {% block title %}Home{% endblock %}
+
 {% block content %}
 <div class="container text-center">
     <h1>Welcome to UnidFood</h1>
     
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Explore restaurants and leave reviews.</p>
-        <a href="{% url 'unidfood:places' %}" class="btn btn-primary">View Restaurants</a>
-        <a href="{% url 'unidfood:places' %}" class="btn btn-info">View Cafes</a>
-        <a href="{% url 'unidfood:places' %}" class="btn btn-warning">View Bars</a>
+        <a href="{% url 'unidfood:places' %}" class="btn btn-primary">View Places</a>
+        <a href="{% url 'unidfood:profile' %}" class="btn btn-outline-secondary mb-2">My Profile</a>
     {% else %}
         <a href="{% url 'unidfood:register' %}" class="btn btn-dark">Get Started</a>
     {% endif %}
