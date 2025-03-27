@@ -23,12 +23,12 @@ def home(request):
 def register(request):
     registered = False
 
-	if request.method == 'POST' :
-		user_form = UserForm(request.POST)
-		profile_form = UserProfileForm(request.POST)
-		
-		if user_form.is_valid() and profile_form.is_valid():
-			user = user_form.save(commit=False)
+    if request.method == 'POST' :
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save(commit=False)
 
         if user_form.is_valid() and profile_form.is_valid():
             username = user_form.cleaned_data['username']
@@ -87,8 +87,8 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
-	logout(request)
-	return redirect(reverse('unidfood:home'))
+    logout(request)
+    return redirect(reverse('unidfood:home'))
 
 @login_required
 def add_review(request):

@@ -108,7 +108,7 @@ def populate():
         add_place(
             category    = categories["Bar"],
             name        = "The Iron Stag",
-            address     = "14 Brick Lane, London E1 6RF",
+            address     = "14 High Street, Glasgow G1 4PQ",
             description = "A snug bar with a wall of whiskies, live folk music, and a warm, local feel.",),
 
         add_place(
