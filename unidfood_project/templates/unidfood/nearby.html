@@ -1,4 +1,5 @@
 {% extends 'unidfood/base.html' %}
+{% load static %}
 
 {% block title %}Nearby Places{% endblock %}
 
@@ -17,8 +18,9 @@
         <!-- Places will be dynamically added here -->
     </ul>
 
+{% endblock %}
+
+{% block extra_scripts %}
     <!-- Load JS main.js File -->
     <script src="{% static 'js/main.js' %}"></script>
-
-
 {% endblock %}

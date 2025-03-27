@@ -279,7 +279,7 @@ def place(request, place_id):
 
 def nearby(request):
     places = Place.objects.all()
-    return render(request, 'nearby.html', {'places': places})
+    return render(request, 'unidfood/nearby.html', {'places': places})
 
 def search(request):
     query = request.GET.get('q', '')
