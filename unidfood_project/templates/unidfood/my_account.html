@@ -3,25 +3,17 @@
 {% block title %}My Account{% endblock %}
 
 {% block content %}
-    <h1>My Account</h1>
+<div class="container text-center">
+    <h2 class="mb-4">My Account</h2>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ user_form.as_p }} 
-        {{ profile_form.as_p }}  
-
-        <button type="submit">Update Account</button>
-    </form>
-
-    {% if user_form.errors or profile_form.errors %}
-        <p style="color: red;">There was an error updating your account. Please check the fields.</p>
+    {% if user.userprofile.image %}
+        <img src="{{ user.userprofile.image.url }}" class="img-thumbnail mb-3" width="150" alt="Profile Picture">
     {% endif %}
 
-    <hr>
-    <h2>Account Actions</h2>
-    <ul>
-        <li><a href="{% url 'unidfood:change_password' %}">Change Password</a></li>
-        <li><a href="{% url 'unidfood:logout' %}">Logout</a></li>
-        <li><a href="{% url 'unidfood:delete_account' %}" style="color: red;">Delete Account</a></li>
-    </ul>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <a href="{% url 'unidfood:edit_account' %}" class="btn btn-primary mt-2">Edit Account</a>
+    <a href="{% url 'unidfood:delete_account' %}" class="btn btn-danger mt-2">Delete Account</a>
+</div>
 {% endblock %}
