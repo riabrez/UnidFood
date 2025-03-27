@@ -243,10 +243,14 @@ def place_detail(request, place_id):
 def place(request, place_id):
     place = get_object_or_404(Place, id=place_id)
     
-    existing_review = Review.objects.filter(user=request.user, place=place).first()
+    if request.user.is_anonymous:
+        existing_review = None
+    else:
+        existing_review = Review.objects.filter(user=request.user, place=place).first()
     
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=existing_review)
+        print(form)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
@@ -258,6 +262,8 @@ def place(request, place_id):
         form = ReviewForm(instance=existing_review)
         
     reviews = Review.objects.filter(place=place)
+    for review in reviews:
+        review.star_rating = "*" * review.rating + "." * (5 - review.rating)
 
     return render(request, 'unidfood/place.html', {'place': place, 'existing_review': existing_review, 'form': form, 'reviews': reviews})
 
