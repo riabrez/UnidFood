@@ -6,6 +6,11 @@ from unidfood.forms import UserForm, UserProfileForm, ReviewForm
 from unidfood.models import Review, Meetup, Invitation, Deal, Place, PlaceCategory
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 def home(request):
     return render(request, 'unidfood/home.html')
@@ -18,7 +23,7 @@ def register(request):
 		profile_form = UserProfileForm(request.POST)
 		
 		if user_form.is_valid() and profile_form.is_valid():
-			user = user_form.save()
+			user = user_form.save(commit=False)
 
 			user.set_password(user.password)
 			user.save()
@@ -38,25 +43,26 @@ def register(request):
 
 	return render(request, 'unidfood/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
-
 def user_login(request):
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        remember_me = request.POST.get('remember_me')
 
-		user = authenticate(username=username, password=password)
-		if user:
-			if user.is_active:
-				login(request, user)
-				return redirect(reverse('unidfood:home'))
-			else:
-				return HttpResponse("Your UnidFood account is disabled.")
-		else:
-			print(f"Invalid login details: {username}, {password}")
-			return HttpResponse("Invalid login details supplied.")
-	else:
-		return render(request, 'unidfood/login.html')
-	
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                if not remember_me:
+                    request.session.set_expiry(0)
+                return redirect(request.GET.get('next') or 'unidfood:home')
+            else:
+                messages.error(request, "Your account is disabled.")
+        else:
+            messages.error(request, "Invalid username or password.")
+
+    return render(request, 'unidfood/login.html')
+
 @login_required
 def user_logout(request):
 	logout(request)
@@ -138,3 +144,57 @@ def nearby(request):
 
 def search(request):
     return HttpResponse("TODO: search view")
+@login_required
+def profile(request):
+    user_profile = request.user.userprofile
+
+    return render(request, 'account/profile.html', {
+        'user_profile': user_profile,
+    })
+@login_required
+def edit_profile(request):
+    user_profile = request.user.userprofile
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('unidfood:profile') 
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'account/edit_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
+
+    
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect('unidfood:goodbye')
+    return render(request, 'account/delete_account.html')
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  
+            messages.success(request, "Your password has been changed successfully.")
+            return redirect('account:profile')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, 'account/change_password.html', {'form': form})
+def goodbye(request):
+    return render(request, 'account/goodbye.html')
