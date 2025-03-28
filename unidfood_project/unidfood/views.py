@@ -121,32 +121,25 @@ def my_account(request):
 
 @login_required
 def edit_account(request):
-    user = request.user
-    profile = user.userprofile
+    user_profile = request.user.userprofile
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=user)
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, "Your profile has been updated.")
-            return redirect('unidfood:my_account')
+            messages.success(request, "Profile updated successfully!")
+            return redirect('unidfood:profile') 
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        user_form = UserForm(instance=user)
-        profile_form = UserProfileForm(instance=profile)
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
 
-    return render(request, 'unidfood/edit_account.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'unidfood/edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
-@login_required
-def delete_account(request):
-    if request.method == 'POST':
-        request.user.delete()
-        messages.success(request, "Your account has been deleted.")
-        return redirect('unidfood:goodbye')
-    return render(request, 'unidfood/delete_account.html')
-                  
 @login_required
 def change_password(request):
     if request.method == 'POST':
@@ -155,11 +148,19 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  
             messages.success(request, "Your password has been changed successfully.")
-            return redirect('account:profile')
+            return redirect('unidfood:my_account')
     else:
         form = PasswordChangeForm(user=request.user)
 
     return render(request, 'account/change_password.html', {'form': form})
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        request.user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect('unidfood:goodbye')
+    return render(request, 'unidfood/delete_account.html')
 
 def goodbye(request):
     return render(request, 'account/goodbye.html')
@@ -303,52 +304,3 @@ def fetch_places(request):
     ]
 
     return JsonResponse(data, safe=False)
-
-
-@login_required
-def edit_profile(request):
-    user_profile = request.user.userprofile
-
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Profile updated successfully!")
-            return redirect('unidfood:profile') 
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = UserProfileForm(instance=user_profile)
-
-    return render(request, 'account/edit_profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-    })
-
-    
-@login_required
-def delete_account(request):
-    if request.method == 'POST':
-        request.user.delete()
-        messages.success(request, "Your account has been deleted.")
-        return redirect('unidfood:goodbye')
-    return render(request, 'account/delete_account.html')
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  
-            messages.success(request, "Your password has been changed successfully.")
-            return redirect('account:profile')
-    else:
-        form = PasswordChangeForm(user=request.user)
-
-    return render(request, 'account/change_password.html', {'form': form})
-def goodbye(request):
-    return render(request, 'account/goodbye.html')
