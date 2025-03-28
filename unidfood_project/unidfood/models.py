@@ -71,6 +71,7 @@ class Meetup(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     time = models.DateTimeField()
     details = models.CharField(max_length=300, blank=True)
+    attendees = models.ManyToManyField(User, related_name='meetups')
 
     def __str__(self):
         return f"{self.place} at {self.time}"
