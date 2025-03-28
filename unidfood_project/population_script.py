@@ -283,6 +283,8 @@ def add_meetup(user, place, time, details):
         place=place,
         time=time,
         details=details)
+    meetup.attendees.add(user)
+    meetup.save()
     print("Created meetup", meetup)
     return meetup
     
