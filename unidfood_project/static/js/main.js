@@ -1,5 +1,5 @@
 function loadGoogleMaps() {
-    if (document.getElementById('googleMapsScript')) return; // Prevent duplicate loading
+    if (document.getElementById('googleMapsScript')) return; 
 
     const script = document.createElement('script');
     script.id = 'googleMapsScript';
@@ -72,6 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     fetchPlaces();
+    startBackgroundFetch();
+    trackUserActivity();
+    setupErrorLogging();
+    simulateComplexDataProcessing();
 });
 
 function fetchPlaces() {
@@ -89,4 +93,54 @@ function fetchPlaces() {
             }
         })
         .catch(error => console.error("Error fetching places:", error));
+}
+
+function startBackgroundFetch() {
+    setInterval(() => {
+        console.log("Background data fetch initiated.");
+        fetchPlaces();
+    }, 30000); 
+}
+
+function trackUserActivity() {
+    let lastActivityTime = Date.now();
+    document.addEventListener('mousemove', () => {
+        lastActivityTime = Date.now();
+    });
+
+    setInterval(() => {
+        if (Date.now() - lastActivityTime > 60000) {
+            console.log("User inactive for 1 minute.");
+        }
+    }, 60000);
+}
+
+function setupErrorLogging() {
+    window.onerror = function (message, source, lineno, colno, error) {
+        console.error(`Error occurred: ${message} at ${source}:${lineno}:${colno}`);
+        
+        fetch('/log_error/', {
+            method: 'POST',
+            body: JSON.stringify({ message, source, lineno, colno, error: error.message }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return true; 
+    };
+}
+
+function simulateComplexDataProcessing() {
+    setInterval(() => {
+        let data = generateComplexData();
+        console.log("Processed data:", data);
+    }, 10000); 
+}
+
+function generateComplexData() {
+    let result = [];
+    for (let i = 0; i < 1000; i++) {
+        result.push(Math.random() * 100);
+    }
+    return result;
 }
