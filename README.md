@@ -73,17 +73,24 @@ Once the virtual environment is activated, continue with the following steps:
    pip install -r requirements.txt
    ```
 
-5. Apply migrations:
+5. Create and apply migrations:
    ```sh
+   python manage.py makemigrations
    python manage.py migrate
    ```
+   
+6. Populate the database:
+   ```sh
+   python population_script.py
 
-6. Create a superuser:
+   ```
+
+7. Create a superuser:
    ```sh
    python manage.py createsuperuser
    ```
 
-7. Run the development server:
+8. Run the development server:
    ```sh
    python manage.py runserver
    ```
