@@ -24,14 +24,17 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-repo/unidfood.git
+   git clone https://github.com/riabrez/UnidFood.git
    cd unidfood
    ```
 
 2. Create a virtual environment and activate it:
    ```sh
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   cd ~  # Navigate to your home directory
+   mkdir Workspace  # Create a new directory if it doesn't exist
+   cd Workspace  # Go into the Workspace directory
+   conda create -n unidfood python=3.11  # Create a virtual environment named 'unidfood'
+   conda activate unidfood  # Activate the virtual environment
    ```
 
 3. Install dependencies:
