@@ -3,17 +3,83 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="container text-center">
-    <h1>Welcome to UnidFood</h1>
-    
+<div class="container text-center mt-5">
+    <h1 class="mb-4">Welcome to UniDFood!</h1>
+    <p class="lead mb-4">Discover the best places to eat, drink, and relax around the University of Glasgow.</p>
+
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Explore restaurants and leave reviews.</p>
         <div class="d-flex justify-content-center gap-2">
             <a href="{% url 'unidfood:places' %}" class="btn btn-dark">View Places</a>
-            <a href="{% url 'unidfood:profile' %}" class="btn btn-outline-secondary">My Profile</a>
+            <a href="{% url 'unidfood:my_account' %}" class="btn btn-outline-secondary">My Profile</a>
         </div>
     {% else %}
-        <a href="{% url 'unidfood:register' %}" class="btn btn-dark">Get Started</a>
+        <p>Join UniDFood today and share your experiences!</p>
+        <a href="{% url 'unidfood:register' %}" class="btn btn-success btn-lg">Get Started</a>
     {% endif %}
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <h3>Discover</h3>
+            <p>Find new restaurants, cafes, and bars near your university.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Review</h3>
+            <p>Share your experiences and help others find great places.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Connect</h3>
+            <p>Join a foodie community and discuss the best spots in town.</p>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <a href="{% url 'unidfood:places' %}">
+                <img src="/static/images/cafe.jpeg" class="img-fluid rounded shadow" alt="Cafes" />
+                <h4 class="mt-2">Cafes</h4>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'unidfood:places' %}">
+                <img src="/static/images/restaurant.jpg" class="img-fluid rounded shadow" alt="Restaurants" />
+                <h4 class="mt-2">Restaurants</h4>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'unidfood:places' %}">
+                <img src="/static/images/bar.jpeg" class="img-fluid rounded shadow" alt="Bars" />
+                <h4 class="mt-2">Bars</h4>
+            </a>
+        </div>
+    </div>
+
+    <h2 class="mt-5">What Our Users Say</h2>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <p>"UniDFood helped me find my favorite cafe on campus!"</p>
+            <small>- Sarah</small>
+        </div>
+        <div class="col-md-4">
+            <p>"The reviews are super helpful! Great app for students."</p>
+            <small>- Mike</small>
+        </div>
+        <div class="col-md-4">
+            <p>"I love discovering new places to eat with UniDFood!"</p>
+            <small>- Emily</small>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h3>View your meetups</h3>
+        {% if user.is_authenticated %}
+            <div>
+                <a href="{% url 'unidfood:my_meetups' %}" class="btn btn-primary btn-lg">My Meetups</a>
+            </div>
+        {% else %}
+            <a href="{% url 'unidfood:login' %}" class="btn btn-success btn-lg">Login</a>
+        {% endif %}
+    </div><br>
+    
 </div>
 {% endblock %}
