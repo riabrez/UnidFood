@@ -261,7 +261,6 @@ def place(request, place_id):
     
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=existing_review)
-        print(form)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
@@ -275,23 +274,11 @@ def place(request, place_id):
         form = ReviewForm(instance=existing_review)
         
     reviews = Review.objects.filter(place=place)
-    for review in reviews:
-        review.star_rating = "*" * review.rating + "." * (5 - review.rating)
 
     return render(request, 'unidfood/place.html', {'place': place, 'existing_review': existing_review, 'form': form, 'reviews': reviews})
 
 def nearby(request):
     places = Place.objects.all()
-    
-    # places = [
-    #     {'name':place.name,
-    #     'category':place.category.name,
-    #     'address':place.address,
-    #     'longitude':place.longitude,
-    #     'latitude':place.latitude,
-    #     'description':place.description,
-    #     'rating':place.rating,}
-    #     for place in places_query_set]
 
     return render(request, 'unidfood/nearby.html', {'places': places})
 

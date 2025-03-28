@@ -214,10 +214,12 @@ def populate():
 def add_user(username, email, password, first_name, last_name):
     user = User.objects.get_or_create(username=username, defaults={
         "email": email,
-        "password": password,
         "first_name": first_name,
         "last_name": last_name,
     })[0]
+    
+    user.set_password(password)
+    user.save()
     
     add_user_profile(user)
     
@@ -244,7 +246,7 @@ def add_place(category, name, address, coords, description):
         latitude=coords[0],
         longitude=coords[1])
     if created:
-        address=address
+        place.address=address
         place.description = description
         place.save()
         print("Created place", name)
@@ -261,6 +263,7 @@ def add_review(user, place, rating, time, content):
         }
     )
     if created:
+        place.update_rating()
         print(f"Created", review)
     return review
 
