@@ -27,7 +27,7 @@ SECRET_KEY = '5f5ntv4qf)=&nd%&+($fx8b1_awdttakrsnr4!fdwd#bnchtx('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['unidfood.pythonanywhere.com', '.localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
