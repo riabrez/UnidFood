@@ -18,38 +18,79 @@ UniDFood is a web application designed for University of Glasgow students to:
 Ensure you have the following installed:
 - **Python 3.11**
 - **Django 2.2.28**
-- **Virtualenv** (optional but recommended)
+- **Virtualenv** (optional)
 
 ### Steps
 
-1. Clone the repository:
+### Option 1: Setup with **Anaconda** (recommended)
+This method uses **Anaconda** for creating and managing virtual environments.
+
+1. Install **Anaconda**  
+   Download and install Anaconda from [here](https://www.anaconda.com/download/).
+
+2. **Clone the repository**:
    ```sh
-   git clone https://github.com/your-repo/unidfood.git
+   git clone https://github.com/riabrez/UnidFood.git
    cd unidfood
    ```
 
-2. Create a virtual environment and activate it:
+3. Create a virtual environment and activate it:
    ```sh
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   cd ~  # Navigate to your home directory
+   mkdir Workspace  # Create a new directory if it doesn't exist
+   cd Workspace  # Go into the Workspace directory
+   conda create -n unidfood python=3.11  # Create a virtual environment named 'unidfood'
+   conda activate unidfood  # Activate the virtual environment
    ```
 
-3. Install dependencies:
+### Option 2: Setup with **Python venv** (if you don't want to use Anaconda)
+This method uses the standard **venv** module to create a virtual environment.
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/riabrez/UnidFood.git
+   cd unidfood
+
+2. Create a virtual environment:
+   ```sh
+   python3 -m venv unidfood  # Create a virtual environment named 'unidfood'
+   ```
+   
+3. Activate the virtual environment:
+   > On windows:
+   ```sh
+   unidfood\Scripts\activate
+   ```
+   > On Mac/Linux:
+   ```sh
+   source unidfood/bin/activate
+   ```
+### Common Steps
+Once the virtual environment is activated, continue with the following steps:
+
+4. Install dependencies:
    ```sh
    pip install -r requirements.txt
    ```
 
-4. Apply migrations:
+5. Create and apply migrations:
    ```sh
+   python manage.py makemigrations
    python manage.py migrate
    ```
+   
+6. Populate the database:
+   ```sh
+   python population_script.py
 
-5. Create a superuser:
+   ```
+
+7. Create a superuser:
    ```sh
    python manage.py createsuperuser
    ```
 
-6. Run the development server:
+8. Run the development server:
    ```sh
    python manage.py runserver
    ```

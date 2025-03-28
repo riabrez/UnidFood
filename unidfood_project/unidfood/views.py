@@ -138,7 +138,7 @@ def edit_account(request):
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
 
-    return render(request, 'unidfood/edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'unidfood/edit_account.html', {'user_form': user_form, 'profile_form': profile_form})
 
 @login_required
 def change_password(request):
@@ -152,7 +152,7 @@ def change_password(request):
     else:
         form = PasswordChangeForm(user=request.user)
 
-    return render(request, 'account/change_password.html', {'form': form})
+    return render(request, 'unidfood/change_password.html', {'form': form})
 
 @login_required
 def delete_account(request):
@@ -163,7 +163,7 @@ def delete_account(request):
     return render(request, 'unidfood/delete_account.html')
 
 def goodbye(request):
-    return render(request, 'account/goodbye.html')
+    return render(request, 'unidfood/goodbye.html')
 
 @login_required
 def my_reviews(request):
@@ -268,6 +268,8 @@ def place(request, place_id):
             review.place = place
             review.save()
             
+            place.update_rating()
+            
             return redirect('unidfood:place', place_id=place.id)
     else:
         form = ReviewForm(instance=existing_review)
@@ -280,6 +282,17 @@ def place(request, place_id):
 
 def nearby(request):
     places = Place.objects.all()
+    
+    # places = [
+    #     {'name':place.name,
+    #     'category':place.category.name,
+    #     'address':place.address,
+    #     'longitude':place.longitude,
+    #     'latitude':place.latitude,
+    #     'description':place.description,
+    #     'rating':place.rating,}
+    #     for place in places_query_set]
+
     return render(request, 'unidfood/nearby.html', {'places': places})
 
 def search(request):
@@ -294,13 +307,16 @@ def search(request):
 def fetch_places(request):
     query = request.GET.get("q", "")
 
-    places = Place.objects.filter(name__icontains=query)[:5] 
+    places_query_set = Place.objects.filter(name__icontains=query)[:5] 
 
-    data = [{
-        "name": place.name,
-        "category": place.category.name,  
-        "address": place.address,
-    } for place in places
-    ]
+    places = [
+        {'name':place.name,
+        'category':place.category.name,
+        'address':place.address,
+        'longitude':place.longitude,
+        'latitude':place.latitude,
+        'description':place.description,
+        'rating':place.rating,}
+        for place in places_query_set]
 
-    return JsonResponse(data, safe=False)
+    return JsonResponse(places, safe=False)

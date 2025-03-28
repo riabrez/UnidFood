@@ -8,9 +8,10 @@
     <p class="lead mb-4">Discover the best places to eat, drink, and relax around the University of Glasgow.</p>
 
     {% if user.is_authenticated %}
-        <p>Hello, <strong>{{ user.username }}</strong>! Explore and review local spots.</p>
-        <div>
-            <a href="{% url 'unidfood:places' %}" class="btn btn-primary btn-lg">View Places</a>
+        <p>Hello, {{ user.username }}! Explore restaurants and leave reviews.</p>
+        <div class="d-flex justify-content-center gap-2">
+            <a href="{% url 'unidfood:places' %}" class="btn btn-dark">View Places</a>
+            <a href="{% url 'unidfood:my_account' %}" class="btn btn-outline-secondary">My Profile</a>
         </div>
     {% else %}
         <p>Join UniDFood today and share your experiences!</p>
