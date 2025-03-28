@@ -19,13 +19,14 @@
     {% endif %}
 
     {% if user.is_authenticated %}
-        <div class="container">
+        <!-- Start container for the review form -->
+        <div class="review-container container mx-1 my-4">
             {% if existing_review %}
                 <h4>Update your review</h4>
             {% else %}
                 <h4>Add a review</h4>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data" class="container my-4">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
 
@@ -35,7 +36,7 @@
                     <input type="radio" name="rating" value="3"><i></i>
                     <input type="radio" name="rating" value="4"><i></i>
                     <input type="radio" name="rating" value="5"><i></i>
-                </div>
+                </span>
         
                 <div class="mb-3">
                     <label for="{{ form.comment.id_for_label }}" class="form-label">Comment</label>
@@ -47,18 +48,19 @@
                 <button type="submit" class="btn btn-primary">{% if existing_review %}Update{% else %}Submit{% endif %} Review</button>
             </form>
         </div>
+        <!-- End container for the review form -->
     {% endif %}
 
     <h4>Reviews</h4>
     {% if reviews %}
-    <div class="container">
-        {% for review in reviews %}
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">{{ review.user.username }} -
-                                <div class="star-rating">
+        <div>
+            {% for review in reviews %}
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">{{ review.user.username }} - 
+                                    <div class="star-rating">
                                     <div class="stars-empty">
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
@@ -74,23 +76,24 @@
                                         <i class="fa fa-star"></i>
                                     </div>
                                 </div>
-                            {% if review.user == user %}
-                                <div>
-                                    <form method="post" action="{% url 'unidfood:delete_review' review.id %}" class="d-inline">
-                                        {% csrf_token %}
-                                        <button class="btn btn-outline-secondary" type="submit" onclick="return confirm('Are you sure you want to delete your review?');">
-                                            <i class="fa fa-trash-o"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            {% endif %}
+                                </h5>
+                                {% if review.user == user %}
+                                    <div>
+                                        <form method="post" action="{% url 'unidfood:delete_review' review.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button class="btn btn-outline-secondary" type="submit" onclick="return confirm('Are you sure you want to delete your review?');">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <p class="card-text">{{ review.content }}</p>
                         </div>
-                        <p class="card-text">{{ review.content }}</p>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
     {% else %}
         <h5>No reviews available</h5>
     {% endif %}

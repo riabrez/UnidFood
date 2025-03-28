@@ -1,0 +1,26 @@
+.meetup-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.meetup-card:hover {
+    transform: scale(1.02);
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.card-text {
+    font-size: 1em;
+    color: #333;
+}
