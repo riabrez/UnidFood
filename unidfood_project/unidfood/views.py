@@ -186,7 +186,7 @@ def my_reviews(request):
 
 @login_required
 def my_meetups(request):
-    meetups = Meetup.objects.filter(user=request.user) 
+    meetups = Meetup.objects.filter(attendees=request.user) 
     invitations = Invitation.objects.filter(recipient=request.user) 
 
     if request.method == 'POST':
