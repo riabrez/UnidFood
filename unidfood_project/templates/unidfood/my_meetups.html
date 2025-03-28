@@ -1,40 +1,61 @@
 {% extends 'unidfood/base.html' %}
 
+{% block title %}Meetups{% endblock %}
+
+{% block extra_styles %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/meetups.css' %}">
+{% endblock %}
+
 {% block content %}
-  <h2>My Meetups</h2>
+<div class="container px-4">
   
+  <h2 class="mb-4">My Meetups</h2>
+
   {% if meetups %}
-    <ul>
+    <div class="row g-4">
       {% for meetup in meetups %}
-        <li>
-          <strong>{{ meetup.place }}</strong> at {{ meetup.time }}
-          <p>{{ meetup.details }}</p>
-        </li>
+        <div class="col-md-6 col-lg-4">
+          <div class="card meetup-card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ meetup.place }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ meetup.time }}</h6>
+              <p class="card-text">{{ meetup.details }}</p>
+            </div>
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p>You haven't scheduled any meetups.</p>
+    <p class="text-muted">You haven't scheduled any meetups.</p>
   {% endif %}
 
-  <h2>Meetup Invitations</h2>
+  <h2 class="mt-5">Meetup Invitations</h2>
 
   {% if invitations %}
-    <ul>
+    <div class="row g-4">
       {% for invitation in invitations %}
-        <li>
-          <strong>Meetup at {{ invitation.meetup.place }}</strong> on {{ invitation.meetup.time }}
-          <p>{{ invitation.meetup.details }}</p>
+        <div class="col-md-6 col-lg-4">
+          <div class="card meetup-card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Meetup at {{ invitation.meetup.place }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ invitation.meetup.time }}</h6>
+              <p class="card-text">{{ invitation.meetup.details }}</p>
 
-          <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="invitation_id" value="{{ invitation.id }}">
-            <button type="submit" name="action" value="accept">Accept</button>
-            <button type="submit" name="action" value="decline">Decline</button>
-          </form>
-        </li>
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="invitation_id" value="{{ invitation.id }}">
+                <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                <button type="submit" name="action" value="decline" class="btn btn-danger btn-sm">Decline</button>
+              </form>
+            </div>
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p>You have no invitations.</p>
+    <p class="text-muted">You have no invitations.</p>
   {% endif %}
+
+</div>
 {% endblock %}
