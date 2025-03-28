@@ -4,9 +4,15 @@ from unidfood.models import UserProfile, Review, Place
 from unidfood.models import UserProfile
 
 class UserForm(forms.ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
-
+    password1 = forms.CharField(
+        label="Enter your password", 
+        widget=forms.PasswordInput()
+    )
+    password2 = forms.CharField(
+        label="Confirm your password", 
+        widget=forms.PasswordInput()
+    )
+    
     class Meta:
         model = User
         fields = ['username', 'email']
