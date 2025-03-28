@@ -26,11 +26,22 @@ class Place(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(PlaceCategory, on_delete=models.PROTECT)
     address = models.CharField(max_length=300)
+    longitude = models.DecimalField(max_digits=8, decimal_places=3)
+    latitude = models.DecimalField(max_digits=8, decimal_places=3)
     description = models.CharField(max_length=300, blank=True)
     rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    def update_rating(self):
+        reviews = Review.objects.filter(place=self)
+        score = 0
+        for review in reviews:
+            score += review.rating
+
+        self.rating = score / len(reviews)
+        self.save()
     
 class Deal(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)

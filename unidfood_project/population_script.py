@@ -73,48 +73,56 @@ def populate():
             category    = categories["Restaurant"],
             name        = "Marino's",
             address     = "23 Calderwood Road, Glasgow G43 2RP",
+            coords      = (55.8382, -4.3152),
             description = "Authentic Italian pizza from the Marino family. Family friendly atmosphere with something for everyone."),
         
         add_place(
             category    = categories["Restaurant"],
             name        = "The Brass Juniper",
             address     = "187 Langside Road, Glasgow G42 7BX",
+            coords      = (55.8764, -4.1897),
             description = "A stylish brasserie serving hearty dishes like braised lamb shank and gin-infused desserts.",),
 
         add_place(
             category    = categories["Restaurant"],
             name        = "La Luna Tacos",
             address     = "9 Broomhill Road, Glasgow G11 7QA",
+            coords      = (55.8495, -4.2678),
             description = "A lively taqueria serving authentic Mexican street food.",),
 
         add_place(
             category    = categories["Restaurant"],
             name        = "The Jade Pagoda",
             address     = "112 Pollokshaws Road, Glasgow G41 1PX",
+            coords      = (55.8831, -4.2289),
             description = "An elegant spot offering dim sum and Cantonese classics in a zen setting.",),
 
         add_place(
             category    = categories["Cafe"],
             name        = "Copper Kettle Café",
             address     = "45 Drumchapel Road, Glasgow G15 6PL",
+            coords      = (55.8567, -4.2984),
             description = "A cozy nook with steampunk flair, serving bold espresso and scones.",),
 
         add_place(
             category    = categories["Cafe"],
             name        = "Frosted Petals",
             address     = "3 Nitshill Road, Glasgow G53 5QD",
+            coords      = (55.8672, -4.2456),
             description = "A whimsical bakery-café with floral teas and intricate pastries.",),
         
         add_place(
             category    = categories["Bar"],
             name        = "The Iron Stag",
             address     = "14 High Street, Glasgow G1 4PQ",
+            coords      = (55.8429, -4.2073),
             description = "A snug bar with a wall of whiskies, live folk music, and a warm, local feel.",),
 
         add_place(
             category    = categories["Bar"],
             name        = "The Thistle & Crown",
             address     = "27 Govan Road, Glasgow G51 1HJ",
+            coords      = (55.8748, -4.2761),
             description = "A cosy Scottish bar with a tartan-clad interior, serving single malts and haggis bites.",),
     ]
     
@@ -229,12 +237,14 @@ def add_category(name, plural_name):
         print("Created category", name)
     return category
     
-def add_place(category, name, address, description):
+def add_place(category, name, address, coords, description):
     place, created = Place.objects.get_or_create(
         name=name,
         category=category,
-        address=address)
+        latitude=coords[0],
+        longitude=coords[1])
     if created:
+        address=address
         place.description = description
         place.save()
         print("Created place", name)
