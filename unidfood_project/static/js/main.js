@@ -1,6 +1,5 @@
 function loadGoogleMaps() {
-    
-    if (document.getElementById('googleMapsScript')) return;
+    if (document.getElementById('googleMapsScript')) return; // Prevent duplicate loading
 
     const script = document.createElement('script');
     script.id = 'googleMapsScript';
@@ -19,87 +18,75 @@ function initMap() {
         zoom: 14
     });
 
-    const input = document.getElementById("searchBox");
+    const input = document.getElementById("search-input");
     if (input) {
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.addListener("bounds_changed", () => searchBox.setBounds(map.getBounds()));
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.addListener("place_changed", function () {
+            const place = autocomplete.getPlace();
+            if (!place.geometry || !place.geometry.location) return;
 
-        let markers = [];
-        searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
-            if (!places.length) return;
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
 
-            markers.forEach(marker => marker.setMap(null)); 
-            markers = [];
-
-            const bounds = new google.maps.LatLngBounds();
-            places.forEach(place => {
-                if (!place.geometry?.location) return;
-
-                const marker = new google.maps.Marker({
-                    map,
-                    title: place.name,
-                    position: place.geometry.location
-                });
-                markers.push(marker);
-                bounds.extend(place.geometry.viewport || place.geometry.location);
+            new google.maps.Marker({
+                position: place.geometry.location,
+                map,
+                title: place.name
             });
-            map.fitBounds(bounds);
         });
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (document.getElementById("map")) loadGoogleMaps();
-});
+    if (document.getElementById("map")) {
+        loadGoogleMaps();
+    }
 
-document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search");
     const resultsDiv = document.getElementById("results");
 
-    if (!searchInput || !resultsDiv) return;
+    if (searchInput && resultsDiv) {
+        searchInput.addEventListener("keyup", function () {
+            let query = searchInput.value.trim();
+            if (query.length > 2) {
+                fetch(`/search/?q=${query}`, {
+                    method: "GET",
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resultsDiv.innerHTML = "";
+                    localStorage.setItem("searchResults", JSON.stringify(data));
 
-    searchInput.addEventListener("keyup", function () {
-        let query = searchInput.value.trim();
-
-        if (query.length > 2) {
-            fetch(`/search/?q=${query}`, {
-                method: "GET",
-                headers: { "X-Requested-With": "XMLHttpRequest" }
-            })
-            .then(response => response.json())
-            .then(data => {
+                    data.forEach(place => {
+                        let div = document.createElement("div");
+                        div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
+                        resultsDiv.appendChild(div);
+                    });
+                })
+                .catch(error => console.error("Error fetching search results:", error));
+            } else {
                 resultsDiv.innerHTML = "";
+            }
+        });
+    }
 
-                localStorage.setItem("searchResults", JSON.stringify(data));
-
-                data.forEach(place => {
-                    let div = document.createElement("div");
-                    div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
-                    resultsDiv.appendChild(div);
-                });
-            })
-            .catch(error => console.error("Error fetching search results:", error));
-        } else {
-            resultsDiv.innerHTML = "";
-        }
-    });
+    fetchPlaces();
 });
 
-
 function fetchPlaces() {
-    fetch("/fetch_places/")  
-        .then(response => response.json())  
+    fetch("/fetch_places/")
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch places");
+            return response.json();
+        })
         .then(data => {
-            console.log("Fetched Places Data:", data);  
-
+            console.log("Fetched Places Data:", data);
             localStorage.setItem("placesData", JSON.stringify(data));
-            
+
             if (data.length > 0) {
                 console.log("First Place Name:", data[0].name);
             }
         })
         .catch(error => console.error("Error fetching places:", error));
 }
-
-fetchPlaces();
