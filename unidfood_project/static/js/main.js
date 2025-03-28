@@ -1,6 +1,5 @@
 function loadGoogleMaps() {
-    
-    if (document.getElementById('googleMapsScript')) return;
+    if (document.getElementById('googleMapsScript')) return; 
 
     const script = document.createElement('script');
     script.id = 'googleMapsScript';
@@ -18,83 +17,92 @@ function initMap() {
         center: { lat: 55.8784, lng: -4.2906 }, // Glasgow University Coordinates
         zoom: 14
     });
+    
+    fetchPlaces();
+    const places_json = localStorage.getItem("placesData")
+    const places = JSON.parse(places_json)
 
-    const input = document.getElementById("searchBox");
+   
+    document.querySelectorAll('.move-map-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lat = parseFloat(this.getAttribute('data-lat'));
+            const lng = parseFloat(this.getAttribute('data-lng'));
+            map.setCenter({ lat: lat, lng: lng });
+            map.setZoom(14);
+        });
+    });
+
+    const input = document.getElementById("search-input");
     if (input) {
-        const searchBox = new google.maps.places.SearchBox(input);
-        map.addListener("bounds_changed", () => searchBox.setBounds(map.getBounds()));
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.addListener("place_changed", function () {
+            const place = autocomplete.getPlace();
+            if (!place.geometry || !place.geometry.location) return;
 
-        let markers = [];
-        searchBox.addListener("places_changed", () => {
-            const places = searchBox.getPlaces();
-            if (!places.length) return;
+            map.setCenter(place.geometry.location);
+            map.setZoom(15);
 
-            markers.forEach(marker => marker.setMap(null)); 
-            markers = [];
-
-            const bounds = new google.maps.LatLngBounds();
-            places.forEach(place => {
-                if (!place.geometry?.location) return;
-
-                const marker = new google.maps.Marker({
-                    map,
-                    title: place.name,
-                    position: place.geometry.location
-                });
-                markers.push(marker);
-                bounds.extend(place.geometry.viewport || place.geometry.location);
+            new google.maps.Marker({
+                position: place.geometry.location,
+                map,
+                title: place.name
             });
-            map.fitBounds(bounds);
         });
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (document.getElementById("map")) loadGoogleMaps();
-});
+    if (document.getElementById("map")) {
+        loadGoogleMaps();
+    }
 
-document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search");
     const resultsDiv = document.getElementById("results");
 
-    if (!searchInput || !resultsDiv) return;
+    if (searchInput && resultsDiv) {
+        searchInput.addEventListener("keyup", function () {
+            let query = searchInput.value.trim();
+            if (query.length > 2) {
+                fetch(`/search/?q=${query}`, {
+                    method: "GET",
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resultsDiv.innerHTML = "";
+                    localStorage.setItem("searchResults", JSON.stringify(data));
 
-    searchInput.addEventListener("keyup", function () {
-        let query = searchInput.value.trim();
-
-        if (query.length > 2) {
-            fetch(`/search/?q=${query}`, {
-                method: "GET",
-                headers: { "X-Requested-With": "XMLHttpRequest" }
-            })
-            .then(response => response.json())
-            .then(data => {
+                    data.forEach(place => {
+                        let div = document.createElement("div");
+                        div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
+                        resultsDiv.appendChild(div);
+                    });
+                })
+                .catch(error => console.error("Error fetching search results:", error));
+            } else {
                 resultsDiv.innerHTML = "";
+            }
+        });
+    }
 
-                localStorage.setItem("searchResults", JSON.stringify(data));
-
-                data.forEach(place => {
-                    let div = document.createElement("div");
-                    div.innerHTML = `<strong>${place.name}</strong> - ${place.category} - ${place.address}`;
-                    resultsDiv.appendChild(div);
-                });
-            })
-            .catch(error => console.error("Error fetching search results:", error));
-        } else {
-            resultsDiv.innerHTML = "";
-        }
-    });
+    fetchPlaces();
+    startBackgroundFetch();
+    trackUserActivity();
+    setupErrorLogging();
+    simulateComplexDataProcessing();
 });
 
-
 function fetchPlaces() {
-    fetch("/fetch_places/")  
-        .then(response => response.json())  
+    fetch("/unidfood/fetch_places/")  
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch places");
+            return response.json();
+        })
         .then(data => {
-            console.log("Fetched Places Data:", data);  
-
+            console.log("Fetched Places Data:", data);
             localStorage.setItem("placesData", JSON.stringify(data));
-            
+
             if (data.length > 0) {
                 console.log("First Place Name:", data[0].name);
             }
@@ -102,4 +110,59 @@ function fetchPlaces() {
         .catch(error => console.error("Error fetching places:", error));
 }
 
-fetchPlaces();
+addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.stars-filled').forEach(filled => {
+        const ratingValue = parseFloat(filled.dataset.rating);
+        const percentage = (ratingValue / 5) * 100;
+        filled.style.width = `${percentage}%`;
+})});
+
+function startBackgroundFetch() {
+    setInterval(() => {
+        console.log("Background data fetch initiated.");
+        fetchPlaces();
+    }, 30000); 
+}
+
+function trackUserActivity() {
+    let lastActivityTime = Date.now();
+    document.addEventListener('mousemove', () => {
+        lastActivityTime = Date.now();
+    });
+
+    setInterval(() => {
+        if (Date.now() - lastActivityTime > 60000) {
+            console.log("User inactive for 1 minute.");
+        }
+    }, 60000);
+}
+
+function setupErrorLogging() {
+    window.onerror = function (message, source, lineno, colno, error) {
+        console.error(`Error occurred: ${message} at ${source}:${lineno}:${colno}`);
+        
+        fetch('/log_error/', {
+            method: 'POST',
+            body: JSON.stringify({ message, source, lineno, colno, error: error.message }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return true; 
+    };
+}
+
+function simulateComplexDataProcessing() {
+    setInterval(() => {
+        let data = generateComplexData();
+        console.log("Processed data:", data);
+    }, 10000); 
+}
+
+function generateComplexData() {
+    let result = [];
+    for (let i = 0; i < 1000; i++) {
+        result.push(Math.random() * 100);
+    }
+    return result;
+}
