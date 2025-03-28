@@ -19,20 +19,14 @@ urlpatterns = [
     path('nearby/', views.nearby, name='nearby'),
     path('search/', views.search, name='search'),
     path('fetch_places/', views.fetch_places, name='fetch_places'),
-    path('search/', views.fetch_places, name='fetch_places'),
     path('my_account/', views.my_account, name='my_account'),
     path('my_account/edit/', views.edit_account, name='edit_account'),
     path('my_account/delete/', views.delete_account, name='delete_account'),
     path('change_password/', views.change_password, name='change_password'),
     path('goodbye/', views.goodbye, name='goodbye'),
-    path('profile/', views.profile, name='profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
-    path('profile/delete/', views.delete_account, name='delete_account'),
-    path('change_password/', views.change_password, name='change_password'),
-    path('goodbye/', views.goodbye, name='goodbye'),
     path('password_reset/', auth_views.PasswordResetView.as_view(
-        template_name='account/password_reset.html',
-        email_template_name='account/password_reset_email.html',
+        template_name='unidfood/password_reset.html',
+        email_template_name='unidfood/password_reset_email.html',
         success_url=reverse_lazy('unidfood:password_reset_done') 
     ), name='password_reset'),
 

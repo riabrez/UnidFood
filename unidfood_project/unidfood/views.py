@@ -304,13 +304,7 @@ def fetch_places(request):
 
     return JsonResponse(data, safe=False)
 
-@login_required
-def profile(request):
-    user_profile = request.user.userprofile
 
-    return render(request, 'account/profile.html', {
-        'user_profile': user_profile,
-    })
 @login_required
 def edit_profile(request):
     user_profile = request.user.userprofile
