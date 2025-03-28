@@ -267,6 +267,8 @@ def place(request, place_id):
             review.place = place
             review.save()
             
+            place.update_rating()
+            
             return redirect('unidfood:place', place_id=place.id)
     else:
         form = ReviewForm(instance=existing_review)
@@ -279,7 +281,18 @@ def place(request, place_id):
 
 def nearby(request):
     places = Place.objects.all()
-    return render(request, 'nearby.html', {'places': places})
+    
+    # places = [
+    #     {'name':place.name,
+    #     'category':place.category.name,
+    #     'address':place.address,
+    #     'longitude':place.longitude,
+    #     'latitude':place.latitude,
+    #     'description':place.description,
+    #     'rating':place.rating,}
+    #     for place in places_query_set]
+
+    return render(request, 'unidfood/nearby.html', {'places': places})
 
 def search(request):
     query = request.GET.get('q', '')
@@ -293,16 +306,19 @@ def search(request):
 def fetch_places(request):
     query = request.GET.get("q", "")
 
-    places = Place.objects.filter(name__icontains=query)[:5] 
+    places_query_set = Place.objects.filter(name__icontains=query)[:5] 
 
-    data = [{
-        "name": place.name,
-        "category": place.category.name,  
-        "address": place.address,
-    } for place in places
-    ]
+    places = [
+        {'name':place.name,
+        'category':place.category.name,
+        'address':place.address,
+        'longitude':place.longitude,
+        'latitude':place.latitude,
+        'description':place.description,
+        'rating':place.rating,}
+        for place in places_query_set]
 
-    return JsonResponse(data, safe=False)
+    return JsonResponse(places, safe=False)
 
 @login_required
 def profile(request):

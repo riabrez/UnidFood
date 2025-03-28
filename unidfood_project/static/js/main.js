@@ -17,6 +17,21 @@ function initMap() {
         center: { lat: 55.8784, lng: -4.2906 }, // Glasgow University Coordinates
         zoom: 14
     });
+    
+    fetchPlaces();
+    const places_json = localStorage.getItem("placesData")
+    const places = JSON.parse(places_json)
+
+   
+    document.querySelectorAll('.move-map-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lat = parseFloat(this.getAttribute('data-lat'));
+            const lng = parseFloat(this.getAttribute('data-lng'));
+            map.setCenter({ lat: lat, lng: lng });
+            map.setZoom(14);
+        });
+    });
 
     const input = document.getElementById("search-input");
     if (input) {
@@ -79,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchPlaces() {
-    fetch("/fetch_places/")
+    fetch("/unidfood/fetch_places/")  
         .then(response => {
             if (!response.ok) throw new Error("Failed to fetch places");
             return response.json();
@@ -94,6 +109,13 @@ function fetchPlaces() {
         })
         .catch(error => console.error("Error fetching places:", error));
 }
+
+addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.stars-filled').forEach(filled => {
+        const ratingValue = parseFloat(filled.dataset.rating);
+        const percentage = (ratingValue / 5) * 100;
+        filled.style.width = `${percentage}%`;
+})});
 
 function startBackgroundFetch() {
     setInterval(() => {

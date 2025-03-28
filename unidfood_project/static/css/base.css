@@ -71,3 +71,27 @@ footer {
     color: #212529; 
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); 
 }
+
+/* Star rating */
+.checked {
+    color: #EEBD01;
+}
+
+.star-rating {
+    position: relative;
+    display: inline-block;
+    font-size: 1.5rem;
+}
+
+.stars-empty {
+    color: #ddd;
+}
+
+.stars-filled {
+    color: #f5c518;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
